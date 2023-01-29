@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { FlatList, ListRenderItem, ScrollView, StyleSheet, Text, View, Image, AppRegistry, ImageURISource, SafeAreaView } from 'react-native';
+import { FlatList, ListRenderItem, ScrollView, StyleSheet, Text, View, Image, AppRegistry, ImageURISource, SafeAreaView, SectionList } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { setupApiGames } from './src/services/setupApiGames';
 
@@ -64,26 +64,19 @@ export default function App() {
 
   }, [])
 
-  function filterGames() {
 
-    var dataInfo = games?.map(game => game.infoSection)
-    var dataGames = games?.map(game => game.games)
-    var filtered = []
-
-    if (dataInfo) {
-
-      filtered.push(dataInfo);
-
-      if (dataGames) {
-
-        filtered.push(dataGames);
+    const trs = [
+      {
+        id: "1",
+      },
+      {
+        id: "2",
+      },
+      {
+        id: "3",
       }
-    }
-    console.log(filtered);
-  }
-  filterGames
-
-
+    
+    ]
 
 
 
@@ -98,65 +91,68 @@ export default function App() {
         <View style={styles.game_main}>
           <Text>Jogos de Hoje</Text>
 
-          <View style={styles.game_info} >
-
-            <View style={styles.game_country}>
-              <Text>Brasil</Text>
-            </View>
-
-            <View style={styles.game_league}>
-              <Text>Campeonato Brasileiro</Text>
-            </View >
-
-          </View>
 
 
-          <View style={styles.game_section}>
+          <SectionList
+            sections={games as any}
+            keyExtractor={(item, index) => item + index}
+            renderItem={({ item }) => (
 
-            <View style={styles.game_match}>
-              <View style={styles.game_time}>
-                <Text>20´</Text>
-              </View>
+              <View style={styles.game_section}>
 
-              <View style={styles.breakLine}>
-              </View>
+                <View style={styles.game_match}>
+                  <View style={styles.game_time}>
+                    <Text>{item.games?.time}</Text>
+                  </View>
 
-              <View style={styles.game_team}>
-                <View style={styles.team}>
-                  <View style={styles.team_brand}></View>
-                  <Text style={styles.team_name}>Bayer de Munique</Text>
+                  <View style={styles.breakLine}>
+                  </View>
+
+                  <View style={styles.game_team}>
+                    <View style={styles.team}>
+                      <View style={styles.team_brand}></View>
+                      <Text style={styles.team_name}>{item.games?.home}</Text>
+                    </View>
+
+
+                    <View style={styles.team}>
+                      <View style={styles.team_brand}> </View>
+                      <Text style={styles.team_name}>{item.games?.away}</Text>
+                    </View>
+
+
+                  </View>
+
+                  <View style={styles.breakLine}>
+                  </View>
+
+                  <View style={styles.score}>
+                    <View style={styles.team}>
+                      <Text style={styles.team_name}>{item.games?.homeScore}</Text>
+                    </View>
+
+
+                    <View style={styles.team}>
+                      <Text style={styles.team_name}>{item.games?.homeScore}</Text>
+                    </View>
+
+                  </View>
                 </View>
-
-
-                <View style={styles.team}>
-                  <View style={styles.team_brand}> </View>
-                  <Text style={styles.team_name}>Barcelona</Text>
-                </View>
-
-
-              </View>
-
-              <View style={styles.breakLine}>
-              </View>
-
-              <View style={styles.score}>
-                <View style={styles.team}>
-                  <Text style={styles.team_name}>1</Text>
-                </View>
-
-
-                <View style={styles.team}>
-                  <Text style={styles.team_name}>2</Text>
-                </View>
-
               </View>
 
 
+            )}
+            renderSectionHeader={({ section: { infoSection } }) => (
 
-            </View>
+              <View style={styles.game_info}>
+                <Text style={styles.game_country}>{infoSection?.country}</Text>
+                <Text style={styles.game_league}>{infoSection?.league}</Text>
+              </View>
+            )}
+
+          />
 
 
-          </View>
         </View>
       </SafeAreaView>
 
