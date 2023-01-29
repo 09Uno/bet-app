@@ -1,12 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
-import { FlatList,ListRenderItem , ScrollView, StyleSheet, Text, View, Image, AppRegistry, ImageURISource, SafeAreaView } from 'react-native';
+import { FlatList, ListRenderItem, ScrollView, StyleSheet, Text, View, Image, AppRegistry, ImageURISource, SafeAreaView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { setupApiGames } from './src/services/setupApiGames';
 
 
 interface GamesInfoSection {
 
-  id: string | null | undefined;
+  id: string
   games: Games | null;
   infoSection: InfoSection | null
 }
@@ -39,6 +39,7 @@ export default function App() {
 
 
   const [games, setGames] = useState<GamesInfoSection[]>();
+  const [filtered, setFiltered] = useState<GamesInfoSection[]>();
 
 
   useEffect(() => {
@@ -46,16 +47,45 @@ export default function App() {
     try {
       const api = setupApiGames();
       api?.get('/games').then(response => {
-        console.log(response.data);
+
+
+
+
         setGames(response.data);
+
+
+
       }
       )
     } catch (error) {
-      console.log(error + 'error ao acessar os Jogos');  
+      console.log(error + 'error ao acessar os Jogos');
     }
-  
+
 
   }, [])
+
+  function filterGames() {
+
+    var dataInfo = games?.map(game => game.infoSection)
+    var dataGames = games?.map(game => game.games)
+    var filtered = []
+
+    if (dataInfo) {
+
+      filtered.push(dataInfo);
+
+      if (dataGames) {
+
+        filtered.push(dataGames);
+      }
+    }
+    console.log(filtered);
+  }
+  filterGames
+
+
+
+
 
 
 
@@ -69,39 +99,64 @@ export default function App() {
           <Text>Jogos de Hoje</Text>
 
           <View style={styles.game_info} >
+
+            <View style={styles.game_country}>
+              <Text>Brasil</Text>
+            </View>
+
+            <View style={styles.game_league}>
+              <Text>Campeonato Brasileiro</Text>
+            </View >
+
           </View>
 
-          <FlatList
-            data={games}
-            keyExtractor={ (games) => games}
-            renderItem={(games) => 
 
-            <View style={styles.game_section}>
+          <View style={styles.game_section}>
 
             <View style={styles.game_match}>
               <View style={styles.game_time}>
-                <Text>{games.item.games?.time}</Text>
+                <Text>20´</Text>
               </View>
+
+              <View style={styles.breakLine}>
+              </View>
+
               <View style={styles.game_team}>
                 <View style={styles.team}>
                   <View style={styles.team_brand}></View>
-                  <Text style={styles.team_name}>{games.item.games?.home}</Text>
+                  <Text style={styles.team_name}>Bayer de Munique</Text>
                 </View>
-        
+
+
                 <View style={styles.team}>
                   <View style={styles.team_brand}> </View>
-                  <Text style={styles.team_name}>{games.item.games?.away}</Text>
+                  <Text style={styles.team_name}>Barcelona</Text>
                 </View>
+
+
               </View>
+
+              <View style={styles.breakLine}>
+              </View>
+
+              <View style={styles.score}>
+                <View style={styles.team}>
+                  <Text style={styles.team_name}>1</Text>
+                </View>
+
+
+                <View style={styles.team}>
+                  <Text style={styles.team_name}>2</Text>
+                </View>
+
+              </View>
+
+
+
             </View>
-        
-        
+
+
           </View>
-            
-            }
-          />
-
-
         </View>
       </SafeAreaView>
 
@@ -128,8 +183,25 @@ const styles = StyleSheet.create({
 
   },
   game_info: {
-    width: '90%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    width: '95%',
     height: 'auto',
+    backgroundColor: '#fff',
+    padding: 10,
+    marginBottom: 3,
+    marginTop: 10,
+    marginLeft: 10,
+    marginRight: 10,
+
+
+  },
+  game_country: {
+
+  },
+  game_league: {
 
   },
   game_section: {
@@ -137,8 +209,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 10,
     marginRight: 10,
-    marginBottom: 10,
-    marginTop: 10,
+    marginBottom: 3,
     width: 'auto',
     height: 'auto',
     backgroundColor: '#fff',
@@ -162,15 +233,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 5,
+    marginRight: 5,
+    width: 70
   },
   game_team: {
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-between',
-    width: '100%',
+    width: 220,
     height: 'auto',
     marginTop: 5,
     marginBottom: 5,
+  },
+  score: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: 6,
+    marginBottom: 4,
+    marginLeft: 5,
+    marginRight: 5,
   },
   game_match: {
     display: 'flex',
@@ -179,14 +259,19 @@ const styles = StyleSheet.create({
   team: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'center',
   },
   team_name: {
     marginTop: 'auto',
     marginBottom: 'auto',
     fontSize: 15,
   },
-
+  breakLine: {
+    width: 1,
+    height: "100%",
+    backgroundColor: 'black',
+    marginLeft: 5,
+    marginRight: 5,
+  },
   team_brand: {
     display: 'flex',
     marginLeft: 2,
@@ -213,7 +298,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    width: '80%',
     marginRight: 10,
   },
   tournament: {
