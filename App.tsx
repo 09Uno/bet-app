@@ -1,46 +1,64 @@
 import { StatusBar } from 'expo-status-bar';
-import { FlatList, ListRenderItem, ScrollView, StyleSheet, Text, View, Image, AppRegistry, ImageURISource, SafeAreaView, SectionList } from 'react-native';
+import { StyleSheet, Text, View, ImageURISource, SafeAreaView, SectionList, FlatList, ListRenderItem } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { setupApiGames } from './src/services/setupApiGames';
+import { groupBy } from 'lodash';
 
 
-interface GamesInfoSection {
+type GamesInfoSection = {
 
   id: string
-  games: Games | null;
-  infoSection: InfoSection | null
+  infoSection: InfoSection
+  games: Games
+
 }
 
 type InfoSection = {
-
-  country: string | null | undefined;
-  league: string | null | undefined;
+  id: string | undefined | null
+  country: string | undefined | null
+  league: string | undefined | null
 
 }
 
 type Games = {
+  id: string | undefined | null
+  home: string | undefined | null
+  away: string | undefined | null
 
-  home: string | null | undefined;
-  away: string | null | undefined;
-  homeScore: string | null | undefined;
-  awayScore: string | null | undefined;
-  flagHome: number | ImageURISource | ImageURISource[];
-  flagAway: number | ImageURISource | ImageURISource[];
-  time: string | null | undefined;
+  homeScore: string | undefined | null
+  awayScore: string | undefined | null
 
+  flagHome: string | undefined | null
+  flagAway: string | undefined | null
+
+  time: string | undefined | null
 }
 
+type GamesFilter = {
+  idSection: string 
+  id: string
 
+  country: string
+  league: string
 
+  home: string
+  away: string
+
+  homeScore: string
+  awayScore: string
+
+  flagHome: string
+  flagAway: string
+
+  time: string
+}
 
 
 export default function App() {
 
 
-
   const [games, setGames] = useState<GamesInfoSection[]>();
-  const [filtered, setFiltered] = useState<GamesInfoSection[]>();
-
+  const [filtered, setFiltered] = useState<GamesFilter[]>();
 
   useEffect(() => {
 
@@ -49,14 +67,14 @@ export default function App() {
       api?.get('/games').then(response => {
 
 
-
-
         setGames(response.data);
-
-
 
       }
       )
+
+
+
+
     } catch (error) {
       console.log(error + 'error ao acessar os Jogos');
     }
@@ -65,101 +83,121 @@ export default function App() {
   }, [])
 
 
-    const trs = [
-      {
-        id: "1",
-      },
-      {
-        id: "2",
-      },
-      {
-        id: "3",
+  function filteredData(): GamesFilter[] {
+
+
+    var data = new Array();
+
+    games?.map((game) => {
+
+      if (game.infoSection?.country && game.infoSection?.league) {
+
+        data.push(game.infoSection?.id);
+        data.push(game.infoSection?.id);
+        data.push(game.infoSection?.country);
+        data.push(game.infoSection?.league);
+
       }
-    
-    ]
+      // console.log(game.info?.country)
+      if (game.games?.home && game.games?.away && game.games?.homeScore
+        && game.games?.awayScore && game.games?.time) {
+
+        data.push(game.games?.id);
+        data.push(game.games?.home);
+        data.push(game.games?.away);
+        data.push(game.games?.homeScore);
+        data.push(game.games?.awayScore);
+        data.push(game.games?.time);
+      }
 
 
+        return data;
+    })
+    return data;
+  }
+
+  const data = filteredData() as GamesFilter[];
+
+  useEffect(() => {
+
+    return setFiltered(data);
+
+  }
+    , [games])
 
 
+  filteredData();
+
+  function renderItem({ item }: { item: GamesFilter }) {
+    return (
+      <><View key={item.id} style={styles.game_info}>
+        <Text style={styles.game_country}></Text>
+        <Text style={styles.game_league}>{item.league}</Text>
+      </View>
+        <View style={styles.game_section}>
+
+          <View style={styles.game_match}>
+            <View style={styles.game_time}>
+              <Text>{item.time}</Text>
+            </View>
+
+            <View style={styles.breakLine}>
+            </View>
+
+            <View style={styles.game_team}>
+              <View style={styles.team}>
+                <View style={styles.team_brand}></View>
+                <Text style={styles.team_name}>{item.home}</Text>
+              </View>
+
+
+              <View style={styles.team}>
+                <View style={styles.team_brand}> </View>
+                <Text style={styles.team_name}>{item.away}</Text>
+              </View>
+
+
+            </View>
+
+            <View style={styles.breakLine}>
+            </View>
+
+            <View style={styles.score}>
+              <View style={styles.team}>
+                <Text style={styles.team_name}>{item.homeScore}</Text>
+              </View>
+
+              <View style={styles.team}>
+                <Text style={styles.team_name}>{item.awayScore}</Text>
+              </View>
+
+            </View>
+          </View>
+        </View></>
+    )
+  }
 
   return (
     <>
 
       <StatusBar style="auto" />
 
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container} >
         <View style={styles.game_main}>
           <Text>Jogos de Hoje</Text>
 
-
-
-          <SectionList
-            sections={games as any}
-            keyExtractor={(item, index) => item + index}
-            renderItem={({ item }) => (
-
-              <View style={styles.game_section}>
-
-                <View style={styles.game_match}>
-                  <View style={styles.game_time}>
-                    <Text>{item.games?.time}</Text>
-                  </View>
-
-                  <View style={styles.breakLine}>
-                  </View>
-
-                  <View style={styles.game_team}>
-                    <View style={styles.team}>
-                      <View style={styles.team_brand}></View>
-                      <Text style={styles.team_name}>{item.games?.home}</Text>
-                    </View>
-
-
-                    <View style={styles.team}>
-                      <View style={styles.team_brand}> </View>
-                      <Text style={styles.team_name}>{item.games?.away}</Text>
-                    </View>
-
-
-                  </View>
-
-                  <View style={styles.breakLine}>
-                  </View>
-
-                  <View style={styles.score}>
-                    <View style={styles.team}>
-                      <Text style={styles.team_name}>{item.games?.homeScore}</Text>
-                    </View>
-
-
-                    <View style={styles.team}>
-                      <Text style={styles.team_name}>{item.games?.homeScore}</Text>
-                    </View>
-
-                  </View>
-                </View>
-              </View>
-
-
-            )}
-            renderSectionHeader={({ section: { infoSection } }) => (
-
-              <View style={styles.game_info}>
-                <Text style={styles.game_country}>{infoSection?.country}</Text>
-                <Text style={styles.game_league}>{infoSection?.league}</Text>
-              </View>
-            )}
+          <FlatList data={filtered}
+            keyExtractor={item => item.idSection}
+            renderItem={renderItem}
 
           />
-
-
         </View>
       </SafeAreaView>
 
     </>
   )
-};
 
+}
 
 const styles = StyleSheet.create({
   container: {
