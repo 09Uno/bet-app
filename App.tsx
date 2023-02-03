@@ -1,46 +1,27 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ImageURISource, SafeAreaView, SectionList, FlatList, ListRenderItem } from 'react-native';
+import { StyleSheet, Text, ImageURISource, SafeAreaView, SectionList, FlatList, ListRenderItem, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { setupApiGames } from './src/services/setupApiGames';
-import { groupBy } from 'lodash';
+import { groupBy, indexOf } from 'lodash';
 
 
 type GamesInfoSection = {
 
-  id: string
+  idMain: string
   infoSection: InfoSection
   games: Games
 
 }
 
 type InfoSection = {
-  id: string | undefined | null
-  country: string | undefined | null
-  league: string | undefined | null
+  idInfo: string
+  country: string
+  league: string
 
 }
 
 type Games = {
-  id: string | undefined | null
-  home: string | undefined | null
-  away: string | undefined | null
-
-  homeScore: string | undefined | null
-  awayScore: string | undefined | null
-
-  flagHome: string | undefined | null
-  flagAway: string | undefined | null
-
-  time: string | undefined | null
-}
-
-type GamesFilter = {
-  idSection: string 
-  id: string
-
-  country: string
-  league: string
-
+  idGame: string
   home: string
   away: string
 
@@ -58,7 +39,6 @@ export default function App() {
 
 
   const [games, setGames] = useState<GamesInfoSection[]>();
-  const [filtered, setFiltered] = useState<GamesFilter[]>();
 
   useEffect(() => {
 
@@ -66,14 +46,10 @@ export default function App() {
       const api = setupApiGames();
       api?.get('/games').then(response => {
 
-
         setGames(response.data);
 
       }
       )
-
-
-
 
     } catch (error) {
       console.log(error + 'error ao acessar os Jogos');
@@ -82,100 +58,72 @@ export default function App() {
 
   }, [])
 
+  const dataFilter = [{
+    idMain: '' as string,
+    infoSection: {
+      idInfo: '',
+      country: '',
+      league: ''
+    } as InfoSection,
+    games: {
+      idGame: '',
+      home: '',
+      away: '',
+      homeScore: '',
+      awayScore: '',
+      flagHome: '',
+      flagAway: '',
+      time: "",
+    } as Games
+  }];
 
-  function filteredData(): GamesFilter[] {
+   dataFilter.shift();
 
+  function filteredData() {
 
-    var data = new Array();
 
     games?.map((game) => {
 
-      if (game.infoSection?.country && game.infoSection?.league) {
 
-        data.push(game.infoSection?.id);
-        data.push(game.infoSection?.id);
-        data.push(game.infoSection?.country);
-        data.push(game.infoSection?.league);
+      dataFilter.push({
+        idMain: game.idMain as string,
 
+
+      } as GamesInfoSection);
+
+      if (game.infoSection.country != null || undefined && game.infoSection.league != null || undefined) {
+        dataFilter.push({
+
+          infoSection: {
+            idInfo: game.infoSection.idInfo,
+            country: game.infoSection.country,
+            league: game.infoSection.league
+          } as InfoSection
+
+        } as GamesInfoSection)
       }
-      // console.log(game.info?.country)
-      if (game.games?.home && game.games?.away && game.games?.homeScore
-        && game.games?.awayScore && game.games?.time) {
+      else if (game.games.home != null || undefined && game.games.away != null || undefined) {
+        dataFilter.push({
 
-        data.push(game.games?.id);
-        data.push(game.games?.home);
-        data.push(game.games?.away);
-        data.push(game.games?.homeScore);
-        data.push(game.games?.awayScore);
-        data.push(game.games?.time);
+          games: {
+            idGame: game.games.idGame,
+            home: game.games.home,
+            away: game.games.away,
+            homeScore: game.games.homeScore,
+            awayScore: game.games.awayScore,
+            flagHome: game.games.flagHome,
+            flagAway: game.games.flagAway,
+            time: game.games.time,
+          } as Games
+
+        } as GamesInfoSection)
       }
 
-
-        return data;
-    })
-    return data;
-  }
-
-  const data = filteredData() as GamesFilter[];
-
-  useEffect(() => {
-
-    return setFiltered(data);
-
-  }
-    , [games])
-
-
-  filteredData();
-
-  function renderItem({ item }: { item: GamesFilter }) {
-    return (
-      <><View key={item.id} style={styles.game_info}>
-        <Text style={styles.game_country}></Text>
-        <Text style={styles.game_league}>{item.league}</Text>
-      </View>
-        <View style={styles.game_section}>
-
-          <View style={styles.game_match}>
-            <View style={styles.game_time}>
-              <Text>{item.time}</Text>
-            </View>
-
-            <View style={styles.breakLine}>
-            </View>
-
-            <View style={styles.game_team}>
-              <View style={styles.team}>
-                <View style={styles.team_brand}></View>
-                <Text style={styles.team_name}>{item.home}</Text>
-              </View>
-
-
-              <View style={styles.team}>
-                <View style={styles.team_brand}> </View>
-                <Text style={styles.team_name}>{item.away}</Text>
-              </View>
-
-
-            </View>
-
-            <View style={styles.breakLine}>
-            </View>
-
-            <View style={styles.score}>
-              <View style={styles.team}>
-                <Text style={styles.team_name}>{item.homeScore}</Text>
-              </View>
-
-              <View style={styles.team}>
-                <Text style={styles.team_name}>{item.awayScore}</Text>
-              </View>
-
-            </View>
-          </View>
-        </View></>
+    }
     )
   }
+  filteredData();
+  console.log(dataFilter);
 
   return (
     <>
@@ -186,11 +134,76 @@ export default function App() {
         <View style={styles.game_main}>
           <Text>Jogos de Hoje</Text>
 
-          <FlatList data={filtered}
-            keyExtractor={item => item.idSection}
-            renderItem={renderItem}
+          {dataFilter.map((item) => {
 
-          />
+
+            if (item.infoSection?.idInfo != null || undefined) {
+              for (let index = 0; index < item.infoSection?.idInfo.length; index++) {
+
+                return (
+                  <>
+
+                    <View key={item.infoSection?.idInfo} style={styles.game_info}>
+                      <Text style={styles.game_country}>{item.infoSection?.country}</Text>
+                      <Text style={styles.game_league}>{item.infoSection?.league}</Text>
+                    </View>
+                  </>
+                )
+              }
+            } else if (item.games?.idGame != null || undefined) {
+              for (let index2 = 0; index2 < item.games?.idGame.length; index2++) {
+                return (
+                
+                  <>
+                  <View key={item.games?.idGame} style={styles.game_section}>
+
+                  <View style={styles.game_match}>
+                    <View style={styles.game_time}>
+                      <Text>{item.games?.time}</Text>
+                    </View>
+
+                    <View style={styles.breakLine}>
+                    </View>
+
+                    <View style={styles.game_team}>
+                      <View style={styles.team}>
+                        <Text style={styles.team_brand}></Text>
+                        <Text style={styles.team_name}>{item.games?.home}</Text>
+                      </View>
+
+
+                      <View style={styles.team}>
+                        <Text style={styles.team_brand}> </Text>
+                        <Text style={styles.team_name}>{item.games?.away}</Text>
+                      </View>
+
+
+                    </View>
+
+                    <View style={styles.breakLine}>
+                    </View>
+
+                    <View style={styles.score}>
+                      <View style={styles.team}>
+                        <Text style={styles.team_name}>{item.games?.homeScore}</Text>
+                      </View>
+
+                      <View style={styles.team}>
+                        <Text style={styles.team_name}>{item.games?.awayScore}</Text>
+                      </View>
+
+                    </View>
+                  </View>
+                </View>
+              </>
+
+                  )
+              }
+            }
+          })}
+
+
+
         </View>
       </SafeAreaView>
 
@@ -341,7 +354,7 @@ const styles = StyleSheet.create({
     height: 30,
     backgroundColor: "blue",
     position: 'relative',
-    float: 'rigth '
+    float: 'right '
 
   },
   country: {
@@ -350,6 +363,7 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     backgroundColor: "blue",
-    float: 'rigth '
+    float: 'right '
   }
-});
+})
+
