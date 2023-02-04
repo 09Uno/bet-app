@@ -131,64 +131,24 @@ export default function App() {
       <SafeAreaView style={styles.container} >
         <Header />
         <View style={styles.game_main}>
-        <View style={styles.section_filter}>
+          <View style={styles.section_filter}>
 
 
-          <Text style={styles.filter}>Datas Menu</Text>
-          <Text style={styles.filter}>Item de Busca</Text>
+            <Text style={styles.filter}>Datas Menu</Text>
+            <Text style={styles.filter}>Item de Busca</Text>
 
-        </View>
+          </View>
           {dataFilter.length == 0 &&
 
             (
-              <><View style={styles.game_info}>
-                <View style={styles.country_flag}></View>
-                <View style={styles.game_info_text}>
-                  <Text style={styles.text}>Alemanha</Text>
-                  <Text style={styles.text}>Bundesleague</Text>
+              <>
+                <View style={styles.loading}>
+
+                  <Image style={styles.loading_img} source={require('./src/imgs/loading.gif')} />
+
                 </View>
-              </View>
 
-                <View style={styles.game_section}>
-
-                  <View style={styles.game_match}>
-                    <View style={styles.game_time}>
-                      <Text style={styles.text} >12:00</Text>
-                    </View>
-
-                    <View style={styles.breakLine}>
-                    </View>
-
-                    <View style={styles.game_team}>
-                      <View style={styles.team}>
-                        <View style={styles.team_brand}></View>
-                        <Text style={styles.text}>Borussia</Text>
-                      </View>
-
-
-                      <View style={styles.team}>
-                        <View style={styles.team_brand}></View>
-                        <Text style={styles.text}>Bayern</Text>
-                      </View>
-
-
-                    </View>
-
-                    <View style={styles.breakLine}>
-                    </View>
-
-                    <View style={styles.score}>
-                      <View style={styles.team}>
-                        <Text style={styles.text}>2</Text>
-                      </View>
-
-                      <View style={styles.team}>
-                        <Text style={styles.text}>2</Text>
-                      </View>
-
-                    </View>
-                  </View>
-                </View></>
+              </>
 
             )
 
@@ -203,9 +163,12 @@ export default function App() {
                 return (
                   <>
 
-                    <View key={item.infoSection?.idInfo} style={styles.game_info}>
-                      <Text style={styles.game_country}>{item.infoSection?.country}</Text>
-                      <Text style={styles.game_league}>{item.infoSection?.league}</Text>
+                    <View key={item.infoSection.idInfo} style={styles.game_info}>
+                      <View style={styles.country_flag}></View>
+                      <View style={styles.game_info_text}>
+                        <Text style={styles.text}>{item.infoSection.country}</Text>
+                        <Text style={styles.text}>{item.infoSection.league}</Text>
+                      </View>
                     </View>
                   </>
                 )
@@ -215,11 +178,11 @@ export default function App() {
                 return (
 
                   <>
-                    <View key={item.games?.idGame} style={styles.game_section}>
+                    <View key={item.games.idGame} style={styles.game_section}>
 
                       <View style={styles.game_match}>
                         <View style={styles.game_time}>
-                          <Text>{item.games?.time}</Text>
+                          <Text style={styles.text} >{item.games.time}</Text>
                         </View>
 
                         <View style={styles.breakLine}>
@@ -227,14 +190,14 @@ export default function App() {
 
                         <View style={styles.game_team}>
                           <View style={styles.team}>
-                            <View style={styles.team_brand}> <Image style={styles.team_brand_img} source={{ uri: item.games.flagHome }} /> </View>
-                            <Text style={styles.team_name}>{item.games?.home}</Text>
+                            <View style={styles.team_brand}> <Image style={styles.team_brand_img} source={{ uri: item.games.flagHome }} />  </View>
+                            <Text style={styles.text}>{item.games.home}</Text>
                           </View>
 
 
                           <View style={styles.team}>
-                            <View style={styles.team_brand}> <Image style={styles.team_brand_img} source={{ uri: item.games.flagAway }} /> </View>
-                            <Text style={styles.team_name}>{item.games?.away}</Text>
+                            <View style={styles.team_brand}><Image style={styles.team_brand_img} source={{ uri: item.games.flagAway }} /></View>
+                            <Text style={styles.text}>{item.games.away}</Text>
                           </View>
 
 
@@ -245,11 +208,11 @@ export default function App() {
 
                         <View style={styles.score}>
                           <View style={styles.team}>
-                            <Text style={styles.text}>{item.games?.homeScore}</Text>
+                            <Text style={styles.text}>{item.games.homeScore}</Text>
                           </View>
 
                           <View style={styles.team}>
-                            <Text style={styles.text}>{item.games?.awayScore}</Text>
+                            <Text style={styles.text}>{item.games.awayScore}</Text>
                           </View>
 
                         </View>
@@ -274,6 +237,8 @@ export default function App() {
 
 const styles = StyleSheet.create({
 
+  
+
   text: {
     color: '#fff',
     fontSize: 16,
@@ -287,8 +252,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     width: '100%',
-    height: 'auto',
+    height: '100%',
     color: '#fff ',
+
 
   },
   section_filter: {
@@ -296,17 +262,30 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor : '#3f8872',
+    backgroundColor: '#3f8872',
     padding: 10,
 
   },
+  loading:{
+    display: 'flex',
+    marginTop: 160,
+    
+    marginBottom: 'auto',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+
+  },
+  loading_img:{
+    width: 200,
+    height: 200,
+  },
   filter: {
     marginRight: 10,
-    marginLeft : 10,
+    marginLeft: 10,
   },
   game_main: {
     display: 'flex',
-
     width: '100%',
     color: '#fff',
 
@@ -332,7 +311,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    marginRight: 40,  
+    marginRight: 40,
 
   },
   game_country: {
