@@ -1,9 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, ImageURISource, SafeAreaView, SectionList, FlatList, ListRenderItem, View } from 'react-native';
+import { StyleSheet, Text, SafeAreaView, View, Image } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { setupApiGames } from './src/services/setupApiGames';
-import { groupBy, indexOf } from 'lodash';
-
+import Header from './src/components/header/Header';
 
 type GamesInfoSection = {
 
@@ -77,7 +76,7 @@ export default function App() {
     } as Games
   }];
 
-   dataFilter.shift();
+  dataFilter.shift();
 
   function filteredData() {
 
@@ -87,7 +86,6 @@ export default function App() {
 
       dataFilter.push({
         idMain: game.idMain as string,
-
 
       } as GamesInfoSection);
 
@@ -123,7 +121,7 @@ export default function App() {
     )
   }
   filteredData();
-  console.log(dataFilter);
+  console.log(games);
 
   return (
     <>
@@ -131,8 +129,70 @@ export default function App() {
       <StatusBar style="auto" />
 
       <SafeAreaView style={styles.container} >
+        <Header />
         <View style={styles.game_main}>
-          <Text>Jogos de Hoje</Text>
+        <View style={styles.section_filter}>
+
+
+          <Text style={styles.filter}>Datas Menu</Text>
+          <Text style={styles.filter}>Item de Busca</Text>
+
+        </View>
+          {dataFilter.length == 0 &&
+
+            (
+              <><View style={styles.game_info}>
+                <View style={styles.country_flag}></View>
+                <View style={styles.game_info_text}>
+                  <Text style={styles.text}>Alemanha</Text>
+                  <Text style={styles.text}>Bundesleague</Text>
+                </View>
+              </View>
+
+                <View style={styles.game_section}>
+
+                  <View style={styles.game_match}>
+                    <View style={styles.game_time}>
+                      <Text style={styles.text} >12:00</Text>
+                    </View>
+
+                    <View style={styles.breakLine}>
+                    </View>
+
+                    <View style={styles.game_team}>
+                      <View style={styles.team}>
+                        <View style={styles.team_brand}></View>
+                        <Text style={styles.text}>Borussia</Text>
+                      </View>
+
+
+                      <View style={styles.team}>
+                        <View style={styles.team_brand}></View>
+                        <Text style={styles.text}>Bayern</Text>
+                      </View>
+
+
+                    </View>
+
+                    <View style={styles.breakLine}>
+                    </View>
+
+                    <View style={styles.score}>
+                      <View style={styles.team}>
+                        <Text style={styles.text}>2</Text>
+                      </View>
+
+                      <View style={styles.team}>
+                        <Text style={styles.text}>2</Text>
+                      </View>
+
+                    </View>
+                  </View>
+                </View></>
+
+            )
+
+          }
 
           {dataFilter.map((item) => {
 
@@ -153,51 +213,51 @@ export default function App() {
             } else if (item.games?.idGame != null || undefined) {
               for (let index2 = 0; index2 < item.games?.idGame.length; index2++) {
                 return (
-                
+
                   <>
-                  <View key={item.games?.idGame} style={styles.game_section}>
+                    <View key={item.games?.idGame} style={styles.game_section}>
 
-                  <View style={styles.game_match}>
-                    <View style={styles.game_time}>
-                      <Text>{item.games?.time}</Text>
-                    </View>
+                      <View style={styles.game_match}>
+                        <View style={styles.game_time}>
+                          <Text>{item.games?.time}</Text>
+                        </View>
 
-                    <View style={styles.breakLine}>
-                    </View>
+                        <View style={styles.breakLine}>
+                        </View>
 
-                    <View style={styles.game_team}>
-                      <View style={styles.team}>
-                        <Text style={styles.team_brand}></Text>
-                        <Text style={styles.team_name}>{item.games?.home}</Text>
+                        <View style={styles.game_team}>
+                          <View style={styles.team}>
+                            <View style={styles.team_brand}> <Image style={styles.team_brand_img} source={{ uri: item.games.flagHome }} /> </View>
+                            <Text style={styles.team_name}>{item.games?.home}</Text>
+                          </View>
+
+
+                          <View style={styles.team}>
+                            <View style={styles.team_brand}> <Image style={styles.team_brand_img} source={{ uri: item.games.flagAway }} /> </View>
+                            <Text style={styles.team_name}>{item.games?.away}</Text>
+                          </View>
+
+
+                        </View>
+
+                        <View style={styles.breakLine}>
+                        </View>
+
+                        <View style={styles.score}>
+                          <View style={styles.team}>
+                            <Text style={styles.text}>{item.games?.homeScore}</Text>
+                          </View>
+
+                          <View style={styles.team}>
+                            <Text style={styles.text}>{item.games?.awayScore}</Text>
+                          </View>
+
+                        </View>
                       </View>
-
-
-                      <View style={styles.team}>
-                        <Text style={styles.team_brand}> </Text>
-                        <Text style={styles.team_name}>{item.games?.away}</Text>
-                      </View>
-
-
                     </View>
+                  </>
 
-                    <View style={styles.breakLine}>
-                    </View>
-
-                    <View style={styles.score}>
-                      <View style={styles.team}>
-                        <Text style={styles.team_name}>{item.games?.homeScore}</Text>
-                      </View>
-
-                      <View style={styles.team}>
-                        <Text style={styles.team_name}>{item.games?.awayScore}</Text>
-                      </View>
-
-                    </View>
-                  </View>
-                </View>
-              </>
-
-                  )
+                )
               }
             }
           })}
@@ -213,10 +273,17 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+
+  text: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '500',
+  },
+
   container: {
 
     display: 'flex',
-    backgroundColor: '#a1b9bd',
+    backgroundColor: '#404046',
     alignItems: 'center',
     justifyContent: 'flex-start',
     width: '100%',
@@ -224,32 +291,64 @@ const styles = StyleSheet.create({
     color: '#fff ',
 
   },
+  section_filter: {
+
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor : '#3f8872',
+    padding: 10,
+
+  },
+  filter: {
+    marginRight: 10,
+    marginLeft : 10,
+  },
   game_main: {
     display: 'flex',
+
     width: '100%',
+    color: '#fff',
 
   },
   game_info: {
     display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    width: '95%',
+    width: '100%',
     height: 'auto',
-    backgroundColor: '#fff',
+    backgroundColor: '#505050',
     padding: 10,
     marginBottom: 3,
-    marginTop: 10,
-    marginLeft: 10,
-    marginRight: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#126e51',
+    borderStartWidth: 1,
+    borderStartColor: '#126e51',
 
+
+  },
+  game_info_text: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    marginRight: 40,  
 
   },
   game_country: {
-
   },
   game_league: {
 
+  },
+  country_flag: {
+    marginTop: 'auto',
+    marginBottom: 'auto',
+    width: 45,
+    height: 35,
+    backgroundColor: '#000',
+    float: 'right',
+    display: 'flex',
+    marginRight: 20,
   },
   game_section: {
     padding: 2,
@@ -259,10 +358,10 @@ const styles = StyleSheet.create({
     marginBottom: 3,
     width: 'auto',
     height: 'auto',
-    backgroundColor: '#fff',
+    backgroundColor: '#404046',
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
 
 
   },
@@ -281,7 +380,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: 5,
     marginRight: 5,
-    width: 70
+    width: 70,
+
   },
   game_team: {
     display: 'flex',
@@ -290,12 +390,14 @@ const styles = StyleSheet.create({
     height: 'auto',
     marginTop: 5,
     marginBottom: 5,
+    color: '#fff',
+
   },
   score: {
     display: 'flex',
     flexDirection: 'column',
-    marginTop: 6,
-    marginBottom: 4,
+    marginTop: 'auto',
+    marginBottom: 'auto',
     marginLeft: 5,
     marginRight: 5,
   },
@@ -311,28 +413,33 @@ const styles = StyleSheet.create({
     marginTop: 'auto',
     marginBottom: 'auto',
     fontSize: 15,
+    color: '#fff',
   },
   breakLine: {
     width: 1,
     height: "100%",
-    backgroundColor: 'black',
+    backgroundColor: '#fff',
     marginLeft: 5,
     marginRight: 5,
+    color: '#fff',
+
+
   },
   team_brand: {
     display: 'flex',
-    marginLeft: 2,
-    width: 20,
-    height: 20,
-    backgroundColor: "blue",
+    marginLeft: 3,
+    marginRight: 3,
+    width: 23,
+    height: 23,
     position: 'relative',
     margin: 2,
 
 
+
   },
   team_brand_img: {
-    width: 20,
-    height: 20,
+    width: 23,
+    height: 23,
     position: 'absolute',
     top: 0,
     left: 0,
