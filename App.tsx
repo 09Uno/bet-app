@@ -1,8 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, SafeAreaView, View, Image } from 'react-native';
+import { StyleSheet, Text, SafeAreaView, View, Image, Button } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { setupApiGames } from './src/services/setupApiGames';
 import Header from './src/components/header/Header';
+import { ActivityIndicator, } from 'react-native-paper';
+import { Picker } from '@react-native-picker/picker';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
+
 
 type GamesInfoSection = {
 
@@ -38,6 +43,34 @@ export default function App() {
 
 
   const [games, setGames] = useState<GamesInfoSection[]>();
+
+  const [selectedDate, setSelectedDate] = useState('hoje');
+
+
+
+  var days = [
+    { date: '2022-12-01' },
+    { date: '2022-12-31' },
+    { date: '2023-01-01' },
+    { date: '2023-01-02' },
+    { date: '2023-01-03' },
+    { date: '2023-01-04' },
+    { date: '2023-01-05' },
+    { date: '2023-01-06' },
+    { date: '2023-01-07' },
+    { date: '2023-01-08' },
+    { date: '2023-01-09' },
+    { date: '2023-01-10' },
+    { date: '2023-01-11' },
+  ]
+  var today = '2023-01-05'
+  var todayWorld: string = 'hoje'
+
+  days.map((day) => {
+    if (day.date == today) {
+      day.date = todayWorld
+    }
+  })
 
   useEffect(() => {
 
@@ -128,14 +161,43 @@ export default function App() {
 
       <StatusBar style="auto" />
 
-      <SafeAreaView style={styles.container} >
+      <View style={styles.container} >
         <Header />
         <View style={styles.game_main}>
           <View style={styles.section_filter}>
 
 
-            <Text style={styles.filter}>Datas Menu</Text>
-            <Text style={styles.filter}>Item de Busca</Text>
+            <View style={styles.calendar_filter}>
+              <Icon name="date-range" size={24} color="#126e51" />
+
+              
+              <Picker
+                mode='dialog'
+                style={styles.calendar_filter_list}
+                selectedValue={selectedDate}
+                itemStyle={styles.calendar}
+
+                onValueChange={(itemValue, itemIndex) =>
+                  setSelectedDate(itemValue)
+                }>
+
+                {
+                  days.map((day) => {
+                    return (
+                      <Picker.Item   style={styles.calendar_item} label={day.date} value={day.date} />
+                    )
+                  })
+                }
+
+
+                 
+                
+
+
+              </Picker>
+            </View>
+
+
 
           </View>
           {dataFilter.length == 0 &&
@@ -144,7 +206,7 @@ export default function App() {
               <>
                 <View style={styles.loading}>
 
-                  <Image style={styles.loading_img} source={require('./src/imgs/loading.gif')} />
+                  <ActivityIndicator animating={true} color={"gray"} size={'large'} />
 
                 </View>
 
@@ -228,7 +290,7 @@ export default function App() {
 
 
         </View>
-      </SafeAreaView>
+      </View>
 
     </>
   )
@@ -237,7 +299,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
 
-  
+
 
   text: {
     color: '#fff',
@@ -266,17 +328,17 @@ const styles = StyleSheet.create({
     padding: 10,
 
   },
-  loading:{
+  loading: {
     display: 'flex',
     marginTop: 160,
-    
+
     marginBottom: 'auto',
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
 
   },
-  loading_img:{
+  loading_img: {
     width: 200,
     height: 200,
   },
@@ -284,6 +346,62 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginLeft: 10,
   },
+  picker: {
+    width: 200,
+    height: 50,
+    color: '#FFF',
+    backgroundColor: '#000',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 4,
+    textAlign: 'center',
+  },
+  calendar_filter: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: "100%",
+    height: 30,
+    borderRadius: 5,
+    backgroundColor: '#fff',
+  },
+  calendar_filter_list: {
+    height: 30,
+    color: '#126e51',
+    backgroundColor: '#gray !important',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+    textAlign: 'center',
+    width: 200,
+    borderColor: '#ffffff00',
+
+  },
+  calendar:{
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: "100%",
+    height: 30,
+    borderRadius: 5,
+    backgroundColor: '#fff',
+    
+    },
+  calendar_item: {
+    height: 30,
+    backgroundColor: '#CCC !important',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+    textAlign: 'center',
+    width: 150,
+    borderColor: '#ffffff00',
+
+
+  },
+  
   game_main: {
     display: 'flex',
     width: '100%',
