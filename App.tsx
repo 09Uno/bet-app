@@ -190,10 +190,6 @@ export default function App() {
                 }
 
 
-                 
-                
-
-
               </Picker>
             </View>
 
@@ -369,7 +365,7 @@ const styles = StyleSheet.create({
   calendar_filter_list: {
     height: 30,
     color: '#126e51',
-    backgroundColor: '#gray !important',
+    backgroundColor: '#gray ',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
@@ -391,7 +387,7 @@ const styles = StyleSheet.create({
     },
   calendar_item: {
     height: 30,
-    backgroundColor: '#CCC !important',
+    backgroundColor: '#CCC ',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
@@ -418,11 +414,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#505050',
     padding: 10,
     marginBottom: 3,
-    borderBottomWidth: 1,
+    borderBottomWidth: 2,
     borderBottomColor: '#126e51',
-    borderStartWidth: 1,
-    borderStartColor: '#126e51',
-
+    
+    borderTopWidth: 2,
+    borderTopColor: '#126e51',
 
   },
   game_info_text: {
@@ -438,14 +434,7 @@ const styles = StyleSheet.create({
 
   },
   country_flag: {
-    marginTop: 'auto',
-    marginBottom: 'auto',
-    width: 45,
-    height: 35,
-    backgroundColor: '#000',
-    float: 'right',
-    display: 'flex',
-    marginRight: 20,
+   
   },
   game_section: {
     padding: 2,
