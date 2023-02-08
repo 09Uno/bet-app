@@ -154,7 +154,7 @@ export default function App() {
     )
   }
   filteredData();
-  console.log(games);
+  // console.log(games);
 
   return (
     <>
@@ -170,7 +170,7 @@ export default function App() {
             <View style={styles.calendar_filter}>
               <Icon name="date-range" size={24} color="#126e51" />
 
-              
+
               <Picker
                 mode='dialog'
                 style={styles.calendar_filter_list}
@@ -184,7 +184,9 @@ export default function App() {
                 {
                   days.map((day) => {
                     return (
-                      <Picker.Item   style={styles.calendar_item} label={day.date} value={day.date} />
+                      
+                        <Picker.Item style={styles.calendar_item} label={day.date} value={day.date} />
+                     
                     )
                   })
                 }
@@ -212,76 +214,62 @@ export default function App() {
 
           }
 
-          {dataFilter.map((item) => {
-
-
-            if (item.infoSection?.idInfo != null || undefined) {
-              for (let index = 0; index < item.infoSection?.idInfo.length; index++) {
-
-                return (
-                  <>
-
-                    <View key={item.infoSection.idInfo} style={styles.game_info}>
-                      <View style={styles.country_flag}></View>
-                      <View style={styles.game_info_text}>
-                        <Text style={styles.text}>{item.infoSection.country}</Text>
-                        <Text style={styles.text}>{item.infoSection.league}</Text>
-                      </View>
+         {dataFilter.map((item) => {
+    if (item.infoSection?.idInfo != null || undefined) {
+        for (let index = 0; index < item.infoSection?.idInfo.length; index++) {
+            return (
+                <>
+                    <Text key={item.infoSection.idInfo[index]} style={styles.game_info}>
+                        <Text style={styles.country_flag}></Text>
+                        <Text style={styles.game_info_text}>
+                            <Text style={styles.text}>{item.infoSection.country}</Text>
+                            <Text style={styles.text}>{item.infoSection.league}</Text>
+                        </Text>
+                    </Text>
+                </>
+            )
+        }
+    } else if (item.games?.idGame != null || undefined) {
+        for (let index2 = 0; index2 < item.games?.idGame.length; index2++) {
+            return (
+                <>
+                    <View key={item.games.idGame[index2]} style={styles.game_section}>
+                        <Text style={styles.game_match}>
+                            <Text style={styles.game_time}>
+                                <Text style={styles.text} >{item.games.time}</Text>
+                            </Text>
+                            <Text style={styles.breakLine}></Text>
+                            <Text style={styles.game_team}>
+                                <Text style={styles.team}>
+                                    <Text style={styles.team_brand}>
+                                        <Image style={styles.team_brand_img} source={{ uri: item.games.flagHome }} />
+                                    </Text>
+                                    <Text style={styles.text}>{item.games.home}</Text>
+                                </Text>
+                                <Text style={styles.team}>
+                                    <Text style={styles.team_brand}>
+                                        <Image style={styles.team_brand_img} source={{ uri: item.games.flagAway }} />
+                                    </Text>
+                                    <Text style={styles.text}>{item.games.away}</Text>
+                                </Text>
+                            </Text>
+                            <Text style={styles.breakLine}></Text>
+                            <Text style={styles.score}>
+                                <Text style={styles.team}>
+                                    <Text style={styles.text}>{item.games.homeScore}</Text>
+                                </Text>
+                                <Text style={styles.team}>
+                                    <Text style={styles.text}>{item.games.awayScore}</Text>
+                                </Text>
+                            </Text>
+                        </Text>
                     </View>
-                  </>
-                )
-              }
-            } else if (item.games?.idGame != null || undefined) {
-              for (let index2 = 0; index2 < item.games?.idGame.length; index2++) {
-                return (
+                </>
+            )
+        }
+    }
+})}
 
-                  <>
-                    <View key={item.games.idGame} style={styles.game_section}>
-
-                      <View style={styles.game_match}>
-                        <View style={styles.game_time}>
-                          <Text style={styles.text} >{item.games.time}</Text>
-                        </View>
-
-                        <View style={styles.breakLine}>
-                        </View>
-
-                        <View style={styles.game_team}>
-                          <View style={styles.team}>
-                            <View style={styles.team_brand}> <Image style={styles.team_brand_img} source={{ uri: item.games.flagHome }} />  </View>
-                            <Text style={styles.text}>{item.games.home}</Text>
-                          </View>
-
-
-                          <View style={styles.team}>
-                            <View style={styles.team_brand}><Image style={styles.team_brand_img} source={{ uri: item.games.flagAway }} /></View>
-                            <Text style={styles.text}>{item.games.away}</Text>
-                          </View>
-
-
-                        </View>
-
-                        <View style={styles.breakLine}>
-                        </View>
-
-                        <View style={styles.score}>
-                          <View style={styles.team}>
-                            <Text style={styles.text}>{item.games.homeScore}</Text>
-                          </View>
-
-                          <View style={styles.team}>
-                            <Text style={styles.text}>{item.games.awayScore}</Text>
-                          </View>
-
-                        </View>
-                      </View>
-                    </View>
-                  </>
-
-                )
-              }
-            }
-          })}
 
 
 
@@ -374,7 +362,7 @@ const styles = StyleSheet.create({
     borderColor: '#ffffff00',
 
   },
-  calendar:{
+  calendar: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
@@ -383,8 +371,8 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: 5,
     backgroundColor: '#fff',
-    
-    },
+
+  },
   calendar_item: {
     height: 30,
     backgroundColor: '#CCC ',
@@ -397,7 +385,7 @@ const styles = StyleSheet.create({
 
 
   },
-  
+
   game_main: {
     display: 'flex',
     width: '100%',
@@ -416,7 +404,7 @@ const styles = StyleSheet.create({
     marginBottom: 3,
     borderBottomWidth: 2,
     borderBottomColor: '#126e51',
-    
+
     borderTopWidth: 2,
     borderTopColor: '#126e51',
 
@@ -434,7 +422,7 @@ const styles = StyleSheet.create({
 
   },
   country_flag: {
-   
+
   },
   game_section: {
     padding: 2,
