@@ -1,41 +1,72 @@
-<View key={item.games?.idGame} style={styles.game_section}>
+{dataFilter.length == 0 &&
 
-                  <View style={styles.game_match}>
-                    <View style={styles.game_time}>
-                      <Text>{item.games?.time}</Text>
-                    </View>
+  (
+    <>
+      <View style={styles.loading}>
 
-                    <View style={styles.breakLine}>
-                    </View>
+        <ActivityIndicator animating={true} color={"gray"} size={'large'} />
 
-                    <View style={styles.game_team}>
-                      <View style={styles.team}>
-                        <Text style={styles.team_brand}></Text>
-                        <Text style={styles.team_name}>{item.games?.home}</Text>
-                      </View>
+      </View>
 
+    </>
 
-                      <View style={styles.team}>
-                        <Text style={styles.team_brand}> </Text>
-                        <Text style={styles.team_name}>{item.games?.away}</Text>
-                      </View>
+  )
 
+}
 
-                    </View>
+{dataFilter.map((item) => {
+if (item.infoSection?.idInfo != null || undefined) {
+for (let index = 0; index < item.infoSection?.idInfo.length; index++) {
+  return (
+      <>
+          <Text key={item.infoSection.idInfo} style={styles.game_info}>
+              <Text style={styles.country_flag}></Text>
+              <Text style={styles.game_info_text}>
+                  <Text key={"Contry" + item.infoSection.country } style={styles.text}>{item.infoSection.country}</Text>
+                  <Text key={item.infoSection.league} style={styles.text}>{item.infoSection.league}</Text>
+              </Text>
+          </Text>
+      </>
+  )
+}
+} else if (item.games?.idGame != null || undefined) {
+for (let index2 = 0; index2 < item.games?.idGame.length; index2++) {
+  return (
+      <>
+          <View key={item.games.idGame} style={styles.game_section}>
+              <Text style={styles.game_match}>
+                  <Text style={styles.game_time}>
+                      <Text style={styles.text} key={"time" + item.games.time} >{item.games.time}</Text>
+                  </Text>
+                  <Text style={styles.breakLine}></Text>
+                  <Text style={styles.game_team}>
+                      <Text style={styles.team}>
+                          <Text style={styles.team_brand}>
+                              <Image style={styles.team_brand_img} key={"flagHome" + item.games.flagHome } source={item.games.flagHome ? { uri: item.games.flagHome } : require('./src/imgs/teamIMG.png')} />
+                          </Text>
+                          <Text style={styles.text} key={item.games.home} >{item.games.home}</Text>
+                      </Text>
+                      <Text style={styles.team}>
+                          <Text style={styles.team_brand}>
+                              <Image style={styles.team_brand_img} key={"flagAway" + item.games.flagAway } source={item.games.flagAway ? { uri: item.games.flagAway } : require('./src/imgs/teamIMG.png')}/>
+                          </Text>
+                          <Text key={item.games.away} style={styles.text}>{item.games.away}</Text>
+                      </Text>
+                  </Text>
+                  <Text style={styles.breakLine}></Text>
+                  <Text style={styles.score}>
+                      <Text style={styles.team}>
+                          <Text key={ "homeScore" +  item.games.homeScore} style={styles.text}>{item.games.homeScore}</Text>
+                      </Text>
+                      <Text style={styles.team}>
+                          <Text key={"awayScore" + item.games} style={styles.text}>{item.games.awayScore}</Text>
+                      </Text>
+                  </Text>
+              </Text>
+          </View>
+      </>
+  )
+}
+}
+})}
 
-                    <View style={styles.breakLine}>
-                    </View>
-
-                    <View style={styles.score}>
-                      <View style={styles.team}>
-                        <Text style={styles.team_name}>{item.games?.homeScore}</Text>
-                      </View>
-
-                      <View style={styles.team}>
-                        <Text style={styles.team_name}>{item.games?.awayScore}</Text>
-                      </View>
-
-                    </View>
-                  </View>
-                </View>
-              </>

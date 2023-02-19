@@ -1,0 +1,70 @@
+{
+	"api": {
+		"results": 122,
+		"fixtures": {
+			"999247": {
+				"fixture_id": "999247",
+				"event_timestamp": "1676246400",
+				"event_date": "2023-02-13T00:00:00+00:00",
+				"league_id": "4991",
+				"round": "Club Friendlies 3",
+				"homeTeam_id": "6801",
+				"awayTeam_id": "4221",
+				"homeTeam": "KAMAZ",
+				"awayTeam": "Qizilqum",
+				"status": "Match Cancelled",
+				"statusShort": "CANC",
+				"goalsHomeTeam": null,
+				"goalsAwayTeam": null,
+				"halftime_score": null,
+				"final_score": null,
+				"penalty": "-",
+				"elapsed": "0",
+				"firstHalfStart": "0",
+				"secondHalfStart": "0"
+			},
+            "fixtures": {
+                "989309": {
+                    "fixture_id": "989309",
+                    "event_timestamp": "1676250600",
+                    "event_date": "2023-02-13T01:10:00+00:00",
+                    "league_id": "4992",
+                    "round": "Apertura - 4",
+                    "homeTeam_id": "1137",
+                    "awayTeam_id": "1127",
+                    "homeTeam": "Atletico Nacional",
+                    "awayTeam": "Deportivo Cali",
+                    "status": "Match Finished",
+                    "statusShort": "FT",
+                    "goalsHomeTeam": "1",
+                    "goalsAwayTeam": "1",
+                    "halftime_score": "1-0",
+                    "final_score": "1 - 1",
+                    "penalty": "-",
+                    "elapsed": "0",
+                    "firstHalfStart": "1676250600",
+                    "secondHalfStart": "1676254200"
+                },
+                "992427": {
+                    "fixture_id": "992427",
+                    "event_timestamp": "1676259000",
+                    "event_date": "2023-02-13T03:30:00+00:00",
+                    "league_id": "4918",
+                    "round": "Final Group - 2",
+                    "homeTeam_id": "7188",
+                    "awayTeam_id": "7181",
+                    "homeTeam": "West Bengal",
+                    "awayTeam": "Services",
+                    "status": "Match Finished",
+                    "statusShort": "FT",
+                    "goalsHomeTeam": "1",
+                    "goalsAwayTeam": "2",
+                    "halftime_score": "1-1",
+                    "final_score": "1 - 2",
+                    "penalty": "-",
+                    "elapsed": "0",
+                    "firstHalfStart": "1676259000",
+                    "secondHalfStart": "1676262600"
+        }
+    }
+}
