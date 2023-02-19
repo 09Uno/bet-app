@@ -5,32 +5,43 @@ import Header from './src/components/header/Header';
 
 import GamesData from './src/services/requestDataFromApi/getGamesFromApi';
 import { GamesToUseProps } from './src/services/requestDataFromApi/getGamesFromApi';
+import { Picker } from '@react-native-picker/picker';
+import { BsCalendar3 } from 'react-icons/bs'
 
 export default function App() {
 
   const [gamesToUse, setGamesToUse] = useState<GamesToUseProps[] | null | undefined>(null);
 
   useEffect(() => {
-try {
-    async function gamesToday() {
-      const gamesToday = await GamesData();
-      setGamesToUse(gamesToday);
-      // console.log(gamesToday);
+    try {
+      async function gamesToday() {
+        const gamesToday = await GamesData();
+        setGamesToUse(gamesToday);
+        // console.log(gamesToday);
+      }
+      gamesToday().then(() => {
+
+
+
+      });
+    } catch (error) {
+      console.log(error);
     }
-    gamesToday().then(() => {
-
-
-
-    });
-  } catch (error) {
-    console.log(error);
-  }
 
   }, []);
 
-  function handleGamesToday(){
-    
-      
+  //pegar datas do calendario e mandar para o getGamesFromApi
+  function handleCalendar(data: string) {
+
+  }
+
+
+  //retornar os jogos do dia no front
+
+
+  function handleGamesToday() {
+
+
 
   }
 
@@ -43,7 +54,22 @@ try {
         <Header />
         <View style={styles.game_main}>
           <View style={styles.section_filter}>
-            <View style={styles.calendar_filter}></View>
+
+            <View style={styles.calendar_item}>
+              <BsCalendar3 size={17} color="#fff" />
+              <Picker style={styles.picker}
+                mode="dialog"
+                selectedValue="option1"
+                dropdownIconRippleColor="transparent"
+                dropdownIconColor="transparent"
+              >
+                <Picker.Item style={styles.piker_item} label="Option 1" value="option1" />
+                <Picker.Item style={styles.piker_item} label="Option 1" value="option1" />
+                <Picker.Item style={styles.piker_item} label="Option 1" value="option1" />
+
+
+              </Picker>
+            </View>
           </View>
           <Text>Teste</Text>
         </View>
@@ -77,9 +103,9 @@ const styles = StyleSheet.create({
 
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     backgroundColor: '#3f8872',
-    padding: 10,
+    padding: 5,
 
   },
   loading: {
@@ -100,61 +126,52 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginLeft: 10,
   },
+  calendar_item: {
+    height: 40,
+    backgroundColor: '#126e51',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+    textAlign: 'center',
+    width: '100%',
+    flexDirection: 'row',
+    borderColor: '#3f8872',
+    borderBottomColor: '#3f8872',
+    borderTopColor: '#3f8872',
+    borderLeftColor: '#3f8872',
+    borderRightColor: '#3f8872',
+
+
+  },
   picker: {
-    width: 200,
-    height: 50,
+    width: "90%",
+    height: 23,
     color: '#FFF',
-    backgroundColor: '#000',
+    backgroundColor: '#126e51',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 4,
     textAlign: 'center',
+    borderBottomColor: 'transparent',
+    borderTopColor: 'transparent',
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+
   },
-  calendar_filter: {
+  piker_item: {
+    height: 17,
+    backgroundColor: '#126e51',
+    color: '#FFF',
+    shadowColor: '#000',
     display: 'flex',
-    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    width: "100%",
-    height: 35,
-    borderRadius: 5,
-    backgroundColor: 'none',
   },
-  calendar_filter_list: {
-    height: 30,
-    color: '#126e51',
-    backgroundColor: '#gray ',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 5,
-    textAlign: 'center',
-    width: 200,
-    borderColor: '#ffffff00',
-
-  },
-  calendar: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: "100%",
-    height: 30,
-    borderRadius: 5,
-    backgroundColor: '#fff',
-
-  },
-  calendar_item: {
-    height: 30,
-    backgroundColor: '#CCC ',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 5,
-    textAlign: 'center',
-    width: 150,
-    borderColor: '#ffffff00',
 
 
-  },
+
+
+
 
   game_main: {
     display: 'flex',

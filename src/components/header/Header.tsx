@@ -1,6 +1,6 @@
 import React from "react"
 import { View, Text, StyleSheet, Image } from "react-native"
-import { Searchbar } from 'react-native-paper';
+import { RiUserSettingsFill } from 'react-icons/ri'
 
 export default function Header() {
     const [searchQuery, setSearchQuery] = React.useState('');
@@ -8,18 +8,17 @@ export default function Header() {
     const onChangeSearch = (query: React.SetStateAction<string>) => setSearchQuery(query);
     return (
         <View style={styles.container_main}>
-            <Image style={styles.logo_img} source={require('../../imgs/beta-app-logo.png')} />
-            <View style={styles.search}>
 
-                <Searchbar
-                    placeholder=""
-                    style={{ backgroundColor: '#3f8872', borderRadius: 10, color:'#fff'  }}
-                    inputStyle={{ color: '#fff' }}
-                    onChangeText={onChangeSearch}
-                    value={searchQuery}
-                />
-
+            <View style={styles.hamburger_menu}>
+                <RiUserSettingsFill size={30} color="#fff" />
             </View>
+
+            <Image style={styles.logo_img} source={require('../../imgs/beta-app-logo.png')} />
+
+            <View style={styles.userConfig}>
+                <RiUserSettingsFill size={30} color="#fff" />
+            </View>
+
         </View>
 
 
@@ -35,27 +34,27 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         flexDirection: 'row',
         display: 'flex',
-        height: 80,
+        height: 75,
         width: '100%',
     },
     logo_img: {
-        width: 120,
-        height: 75,
-        marginTop: 'auto',
-        marginBottom: 'auto',
-        marginLeft: 10,
-        
+        height: 60,
+        width: 80,
+        marginTop: 10,
+        marginBottom: 10,
+
     },
     hamburger_menu: {
-      
+        height: 45,
+        width: 45,
+        marginTop: 25,
+        marginLeft: 10,
+
     },
-    search: {
-        marginRight: 20,
-        marginTop: 'auto',
-        marginBottom: 'auto',
-        width:180,
-        height: 50  ,
-        float: 'right',
+    userConfig: {
+        height: 45,
+        width: 45,
+        marginTop: 25,
 
     }
 
