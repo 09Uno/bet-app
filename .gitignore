@@ -12,5 +12,6 @@ web-build/
 tasks.json
 launch.json
 settings.json
+apiGetData.ts
 # macOS
 .DS_Store

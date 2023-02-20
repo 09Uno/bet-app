@@ -1,22 +1,24 @@
 import React from "react"
 import { View, Text, StyleSheet, Image } from "react-native"
 import { RiUserSettingsFill } from 'react-icons/ri'
+import HamburgerMenu from "../hamburguerMenu/HamburguerMenu";
+
 
 export default function Header() {
     const [searchQuery, setSearchQuery] = React.useState('');
 
-    const onChangeSearch = (query: React.SetStateAction<string>) => setSearchQuery(query);
     return (
         <View style={styles.container_main}>
 
             <View style={styles.hamburger_menu}>
-                <RiUserSettingsFill size={30} color="#fff" />
+                <HamburgerMenu />
             </View>
 
             <Image style={styles.logo_img} source={require('../../imgs/beta-app-logo.png')} />
-
             <View style={styles.userConfig}>
+
                 <RiUserSettingsFill size={30} color="#fff" />
+
             </View>
 
         </View>
@@ -34,7 +36,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         flexDirection: 'row',
         display: 'flex',
-        height: 75,
+        height: 'auto',
         width: '100%',
     },
     logo_img: {
@@ -45,8 +47,8 @@ const styles = StyleSheet.create({
 
     },
     hamburger_menu: {
-        height: 45,
-        width: 45,
+        height: 'auto',
+        width: 'auto',
         marginTop: 25,
         marginLeft: 10,
 
