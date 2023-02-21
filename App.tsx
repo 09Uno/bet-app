@@ -8,6 +8,7 @@ import { GamesToUseProps } from './src/services/requestDataFromApi/getGamesFromA
 import { Picker } from '@react-native-picker/picker';
 import { BsCalendar3 } from 'react-icons/bs'
 
+
 export default function App() {
 
   const [gamesToUse, setGamesToUse] = useState<GamesToUseProps[] | null | undefined>(null);
@@ -21,8 +22,6 @@ export default function App() {
       }
       gamesToday().then(() => {
 
-
-
       });
     } catch (error) {
       console.log(error);
@@ -30,7 +29,7 @@ export default function App() {
 
   }, []);
 
-  //pegar datas do calendario e mandar para o getGamesFromApi
+  //pegar datas do calendário e mandar para o getGamesFromApi
   function handleCalendar(data: string) {
 
   }
@@ -60,7 +59,6 @@ export default function App() {
               <Picker style={styles.picker}
                 mode="dialog"
                 selectedValue="option1"
-                dropdownIconRippleColor="transparent"
                 dropdownIconColor="transparent"
               >
                 <Picker.Item style={styles.piker_item} label="Option 1" value="option1" />
