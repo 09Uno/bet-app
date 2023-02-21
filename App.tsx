@@ -7,12 +7,36 @@ import GamesData from './src/services/requestDataFromApi/getGamesFromApi';
 import { GamesToUseProps } from './src/services/requestDataFromApi/getGamesFromApi';
 import { Picker } from '@react-native-picker/picker';
 import { BsCalendar3 } from 'react-icons/bs'
-
+import moment from 'moment';
 
 export default function App() {
 
   const [gamesToUse, setGamesToUse] = useState<GamesToUseProps[] | null | undefined>(null);
+  const [dates, setDates] = useState<string[]>([]);
+  const [date, setDate] = useState<string>('');
 
+
+  useEffect(() => {
+    const today = moment();
+    setDate(today.format('YYYY-MM-DD'));
+
+
+    const daysBeforeToday = 7;
+    const daysAfterToday = 7;
+
+    const datesBeforeToday = Array.from({ length: daysBeforeToday }, (_, i) =>
+      moment(today).subtract(i + 1, 'days').format('YYYY-MM-DD')
+    );
+
+    const datesAfterToday = Array.from({ length: daysAfterToday }, (_, i) =>
+      moment(today).add(i + 1, 'days').format('YYYY-MM-DD')
+    );
+
+    setDates([...datesBeforeToday.reverse(), today.format('YYYY-MM-DD'), ...datesAfterToday]);
+
+  }, []);
+  
+  
   useEffect(() => {
     try {
       async function gamesToday() {
@@ -29,20 +53,16 @@ export default function App() {
 
   }, []);
 
-  //pegar datas do calendário e mandar para o getGamesFromApi
-  function handleCalendar(data: string) {
 
+  function handleDateSelected(date: string) {
+    
+    const datePicked = date
+    console.log(datePicked);
+    setDate(datePicked);
+    
   }
 
 
-  //retornar os jogos do dia no front
-
-
-  function handleGamesToday() {
-
-
-
-  }
 
 
   return (
@@ -58,17 +78,32 @@ export default function App() {
               <BsCalendar3 size={17} color="#fff" />
               <Picker style={styles.picker}
                 mode="dialog"
-                selectedValue="option1"
+                selectedValue={date}
+                onValueChange={(date, index) => {
+                  handleDateSelected(date)}
+                
+              }
+                  
                 dropdownIconColor="transparent"
               >
-                <Picker.Item style={styles.piker_item} label="Option 1" value="option1" />
-                <Picker.Item style={styles.piker_item} label="Option 1" value="option1" />
-                <Picker.Item style={styles.piker_item} label="Option 1" value="option1" />
+
+                {dates.map((date, index) => {
+
+
+                  return (
+
+                    <Picker.Item style={styles.piker_item} label={moment(date).format("DD/MM/YYYY")} value={date} key={index} />
+                  )
+                })
+                }
+
+
 
 
               </Picker>
             </View>
           </View>
+
           <Text>Teste</Text>
         </View>
       </View>
@@ -164,6 +199,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    textAlign: 'center',
   },
 
 

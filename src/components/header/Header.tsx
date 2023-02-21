@@ -30,7 +30,7 @@ export default function Header() {
   return (
     <View style={styles.container_main}>
       <View style={styles.hamburger_menu}>
-        <Hamburger color="#fff" toggled={toggled} toggle={setToggled} onToggle={toggled => {
+        <Hamburger size={24} color="#fff" toggled={toggled} toggle={setToggled} onToggle={toggled => {
           if (toggled) {
             // open a menu
             openMenu();
@@ -58,6 +58,7 @@ export default function Header() {
       </Modal>
     </View>
   );
+
 }
 
 const styles = StyleSheet.create({
@@ -75,7 +76,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     justifyContent: 'center',
-    alignItems: 'center',
     display: 'flex',
     marginLeft: 'auto',
     marginRight: 'auto',
@@ -87,7 +87,6 @@ const styles = StyleSheet.create({
     width: 'auto',
     marginTop: 20,
     marginLeft: 10,
-    position: 'absolute',
   },
   userConfig: {
     height: 45,
