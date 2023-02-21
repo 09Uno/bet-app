@@ -1,27 +1,46 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Image, Text, Dimensions } from 'react-native';
 import { RiUserSettingsFill } from 'react-icons/ri';
 import { Turn as Hamburger } from 'hamburger-react';
 import Modal from 'react-native-modal';
 
-const { width } = Dimensions.get('window');
-const modalWidth = 0.65 * width;
+
 
 export default function Header() {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const openMenu = () => {
     setIsModalVisible(true);
+    setIsMenuOpen(true);
+
   };
 
   const closeMenu = () => {
     setIsModalVisible(false);
+    setIsMenuOpen(false);
   };
+
+  useEffect(() => {
+    setToggled(isMenuOpen);
+  }, [isMenuOpen]);
+
+  const [toggled, setToggled] = useState(false);
 
   return (
     <View style={styles.container_main}>
       <View style={styles.hamburger_menu}>
-        <Hamburger color="#fff" onToggle={openMenu} />
+        <Hamburger color="#fff" toggled={toggled} toggle={setToggled} onToggle={toggled => {
+          if (toggled) {
+            // open a menu
+            openMenu();
+            toggled = false;
+          } else {
+            // close a menu
+            closeMenu();
+            toggled = false;
+          }
+        }} />
       </View>
 
       <Image style={styles.logo_img} source={require('../../imgs/beta-app-logo.png')} />
@@ -30,11 +49,8 @@ export default function Header() {
         <RiUserSettingsFill size={30} color="#fff" />
       </View>
 
-      <Modal isVisible={isModalVisible} onBackdropPress={closeMenu} backdropOpacity={0.5} style={styles.modal} animationIn="fadeInRight" animationOut="fadeOutRight">
-        <View style={[styles.menuItems, { width: modalWidth }]}>
-          <View style={styles.hamburger_menu}>
-            <Hamburger color="#000" onToggle={closeMenu} />
-          </View>
+      <Modal isVisible={isModalVisible} onBackdropPress={closeMenu} style={styles.modal} animationIn="fadeInRight" animationOut="fadeOutRight">
+        <View style={[styles.menuItems, { width: '100%' }]}>
           <Text style={styles.menuItem}>Menu Item 1</Text>
           <Text style={styles.menuItem}>Menu Item 2</Text>
           <Text style={styles.menuItem}>Menu Item 3</Text>
@@ -63,7 +79,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     marginLeft: 'auto',
     marginRight: 'auto',
-    
+
   },
   hamburger_menu: {
     zIndex: 3,
@@ -81,7 +97,7 @@ const styles = StyleSheet.create({
   modal: {
     justifyContent: 'flex-start',
     alignItems: 'center',
-    width: modalWidth,
+    width: 0.65 * Dimensions.get('window').width,
     margin: 0,
 
   },
@@ -91,9 +107,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   menuItems: {
-    backgroundColor: '#fff',
-   flex: 1,
-   marginTop: 20,
+    backgroundColor: '#0f513c',
+    flex: 1,
+    zIndex: 0,
+    alignItems: 'center',
 
   },
   menuItem: {
