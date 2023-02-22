@@ -13,6 +13,7 @@ import { IconCalendar } from './src/components/icons/Icons';
 
 export default function App() {
 
+  
 
   const [gamesToUse, setGamesToUse] = useState<GamesToUseProps[] | null | undefined>(null);
   const [dates, setDates] = useState<string[]>([]);
@@ -60,16 +61,15 @@ export default function App() {
   function handleDateSelected(date: string) {
 
     const datePicked = date
-    console.log(datePicked);
     setDate(datePicked);
-
   }
 
+ 
 
   useEffect(() => {
     try {
       async function gamesToday() {
-        const gamesToday = await GamesData();
+        const gamesToday = await GamesData(date);
         setGamesToUse(gamesToday);
       }
       gamesToday().then(() => {
@@ -79,12 +79,7 @@ export default function App() {
       console.log(error);
     }
 
-  }, []);
-
-
-  
- 
-
+  }, [date]);
 
 
   return (
@@ -138,7 +133,9 @@ export default function App() {
             </View>
           </View>
 
-          <Text>Teste</Text>
+            
+
+         
         </View>
       </View>
     </>
