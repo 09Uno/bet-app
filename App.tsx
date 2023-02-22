@@ -7,9 +7,9 @@ import { GamesToUseProps } from './src/services/requestDataFromApi/getGamesFromA
 import { Picker } from '@react-native-picker/picker';
 import moment from 'moment';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { Button, IconButton } from 'react-native-paper';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
+import {  IconButton } from 'react-native-paper';
+import { IconCalendar } from './src/components/icons/Icons';
+
 
 export default function App() {
 
@@ -18,6 +18,7 @@ export default function App() {
   const [dates, setDates] = useState<string[]>([]);
   const [date, setDate] = useState<string>('');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const iconCalendar = IconCalendar;
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -27,31 +28,42 @@ export default function App() {
     setDatePickerVisibility(false);
   };
 
-  const handleConfirm = (date : any) => {
-    console.warn("A date has been picked: ", date);
+  function handleConfirm (date : Date){
+    const DateToReturn = moment(date).format('YYYY-MM-DD');
+    handleDateSelected(DateToReturn)
     hideDatePicker();
   };
 
-
+  
   useEffect(() => {
-    const today = moment();
-    setDate(today.format('YYYY-MM-DD'));
+
+    const dataBase = moment();
+    setDate(dataBase.format('YYYY-MM-DD'));
 
 
     const daysBeforeToday = 5;
     const daysAfterToday = 5;
 
     const datesBeforeToday = Array.from({ length: daysBeforeToday }, (_, i) =>
-      moment(today).subtract(i + 1, 'days').format('YYYY-MM-DD')
+      moment(dataBase).subtract(i + 1, 'days').format('YYYY-MM-DD')
     );
 
     const datesAfterToday = Array.from({ length: daysAfterToday }, (_, i) =>
-      moment(today).add(i + 1, 'days').format('YYYY-MM-DD')
+      moment(dataBase).add(i + 1, 'days').format('YYYY-MM-DD')
     );
 
-    setDates([...datesBeforeToday.reverse(), today.format('YYYY-MM-DD'), ...datesAfterToday]);
+    setDates([...datesBeforeToday.reverse(), dataBase.format('YYYY-MM-DD'), ...datesAfterToday]);
 
   }, []);
+
+
+  function handleDateSelected(date: string) {
+
+    const datePicked = date
+    console.log(datePicked);
+    setDate(datePicked);
+
+  }
 
 
   useEffect(() => {
@@ -70,19 +82,8 @@ export default function App() {
   }, []);
 
 
-  function handleDateSelected(date: string) {
-
-    const datePicked = date
-    console.log(datePicked);
-    setDate(datePicked);
-
-  }
-
-  function iconCalendar() {
-    return (
-      <FontAwesomeIcon icon={faCalendarAlt} size={30} color="#fff" />
-    )
-  }
+  
+ 
 
 
 
@@ -107,11 +108,7 @@ export default function App() {
               />
               
               <IconButton size={50} icon={iconCalendar} onPress={showDatePicker} style={styles.calendar_button} />
-              
-
-
-
-
+            
 
               <Picker style={styles.picker}
                 mode="dialog"
@@ -259,7 +256,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     width: '100%',
     color: '#fff',
-    marginTop: 2,
+    marginTop: 0,
+    borderTopColor: '#ffdf1b',
+    borderTopWidth: 2,
 
   },
   game_info: {

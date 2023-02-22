@@ -1,13 +1,15 @@
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import React, { useState } from 'react';
 import { View, StyleSheet, Image, Text, Dimensions } from 'react-native';
 import Modal from 'react-native-modal';
-import { faBars } from '@fortawesome/free-solid-svg-icons'
 import { IconButton } from 'react-native-paper';
+import { HamburgerMenuIcon, SettingsIcon } from '../icons/Icons';
+
 
 export default function Header() {
 
   const [isModalVisible, setModalVisible] = useState(false);
+  const hamburgerMenuIcon = HamburgerMenuIcon; 
+  const settingsItem = SettingsIcon;
 
   function openModal() {
     setModalVisible(true);
@@ -16,12 +18,10 @@ export default function Header() {
     setModalVisible(false);
   }
 
-  function hamburgerMenuIcon() {
-
-    return (
-      <FontAwesomeIcon icon={faBars} size={30} color="#fff" />
-    )
+  function openSettingsModal() {
+    console.log('not implemented yet');
   }
+ 
 
 
   return (
@@ -41,7 +41,7 @@ export default function Header() {
       <Image style={styles.logo_img} source={require('../../imgs/beta-app-logo.png')} />
 
       <View style={styles.userConfig}>
-
+        <IconButton icon={settingsItem} onPress={openSettingsModal} />
       </View>
 
     </View>
@@ -55,14 +55,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row',
     display: 'flex',
-    height: 'auto',
+    height:135,
     width: '100%',
     paddingTop: 15,
+    paddingBottom: 15,
   },
   logo_img: {
-    height: 60,
-    width: 80,
-    marginTop: 13,
+    height: 90,
+    width: 120,
+    marginTop: 20,
     justifyContent: 'center',
     display: 'flex',
     marginLeft: 'auto',
@@ -70,16 +71,16 @@ const styles = StyleSheet.create({
 
   },
   hamburger_menu: {
-    zIndex: 3,
     height: 'auto',
     width: 'auto',
-    marginTop: 20,
+    marginTop: 40,
     marginLeft: 10,
   },
   userConfig: {
-    height: 45,
-    width: 45,
-    marginTop: 25,
+    height: 'auto',
+    width: 'auto',
+    marginTop: 40,
+    marginRight: 10,
   },
   modal: {
     justifyContent: 'flex-start',

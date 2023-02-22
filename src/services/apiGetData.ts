@@ -10,7 +10,7 @@ export function ApiRapid() {
 
             baseURL: 'https://api-football-v1.p.rapidapi.co/',
             headers: {
-                'X-RapidAPI-Key': '6c388cc7d6msh6472b709a3bd129p177bc8jsna3fc13ce99aa',
+                'X-RapidAPI-Key': '',
                 'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com'
             }
 
