@@ -2,18 +2,35 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Text } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Header from './src/components/header/Header';
-
 import GamesData from './src/services/requestDataFromApi/getGamesFromApi';
 import { GamesToUseProps } from './src/services/requestDataFromApi/getGamesFromApi';
 import { Picker } from '@react-native-picker/picker';
-import { BsCalendar3 } from 'react-icons/bs'
 import moment from 'moment';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { Button, IconButton } from 'react-native-paper';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 
 export default function App() {
+
 
   const [gamesToUse, setGamesToUse] = useState<GamesToUseProps[] | null | undefined>(null);
   const [dates, setDates] = useState<string[]>([]);
   const [date, setDate] = useState<string>('');
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date : any) => {
+    console.warn("A date has been picked: ", date);
+    hideDatePicker();
+  };
 
 
   useEffect(() => {
@@ -21,8 +38,8 @@ export default function App() {
     setDate(today.format('YYYY-MM-DD'));
 
 
-    const daysBeforeToday = 7;
-    const daysAfterToday = 7;
+    const daysBeforeToday = 5;
+    const daysAfterToday = 5;
 
     const datesBeforeToday = Array.from({ length: daysBeforeToday }, (_, i) =>
       moment(today).subtract(i + 1, 'days').format('YYYY-MM-DD')
@@ -35,14 +52,13 @@ export default function App() {
     setDates([...datesBeforeToday.reverse(), today.format('YYYY-MM-DD'), ...datesAfterToday]);
 
   }, []);
-  
-  
+
+
   useEffect(() => {
     try {
       async function gamesToday() {
         const gamesToday = await GamesData();
         setGamesToUse(gamesToday);
-        // console.log(gamesToday);
       }
       gamesToday().then(() => {
 
@@ -55,19 +71,24 @@ export default function App() {
 
 
   function handleDateSelected(date: string) {
-    
+
     const datePicked = date
     console.log(datePicked);
     setDate(datePicked);
-    
+
   }
 
+  function iconCalendar() {
+    return (
+      <FontAwesomeIcon icon={faCalendarAlt} size={30} color="#fff" />
+    )
+  }
 
 
 
   return (
     <>
-      <StatusBar style="auto" />
+      <StatusBar backgroundColor="#3f8872" />
 
       <View style={styles.container}>
         <Header />
@@ -75,16 +96,34 @@ export default function App() {
           <View style={styles.section_filter}>
 
             <View style={styles.calendar_item}>
-              <BsCalendar3 size={17} color="#fff" />
+            
+
+
+               <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                mode="date"
+                onConfirm={handleConfirm}
+                onCancel={hideDatePicker}
+              />
+              
+              <IconButton size={50} icon={iconCalendar} onPress={showDatePicker} style={styles.calendar_button} />
+              
+
+
+
+
+
               <Picker style={styles.picker}
                 mode="dialog"
                 selectedValue={date}
                 onValueChange={(date, index) => {
-                  handleDateSelected(date)}
-                
-              }
-                  
+                  handleDateSelected(date)
+                }
+
+                }
+
                 dropdownIconColor="transparent"
+                dropdownIconRippleColor={'transparent'}
               >
 
                 {dates.map((date, index) => {
@@ -96,8 +135,6 @@ export default function App() {
                   )
                 })
                 }
-
-
 
 
               </Picker>
@@ -137,8 +174,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    backgroundColor: '#3f8872',
-    padding: 5,
+    backgroundColor: '#126e51',
+    padding: 0,
+    height: 60,
 
   },
   loading: {
@@ -158,15 +196,17 @@ const styles = StyleSheet.create({
   filter: {
     marginRight: 10,
     marginLeft: 10,
+    height: 70,
+
   },
   calendar_item: {
-    height: 40,
+    height: 60,
     backgroundColor: '#126e51',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
     textAlign: 'center',
-    width: '100%',
+    width: '70%',
     flexDirection: 'row',
     borderColor: '#3f8872',
     borderBottomColor: '#3f8872',
@@ -176,34 +216,42 @@ const styles = StyleSheet.create({
 
 
   },
+  calendar_button: {
+   
+  
+    
+
+  },
   picker: {
-    width: "90%",
-    height: 23,
+    width: "91%",
+    height: 10,
     color: '#FFF',
     backgroundColor: '#126e51',
     justifyContent: 'center',
-    alignItems: 'center',
     borderRadius: 4,
-    textAlign: 'center',
     borderBottomColor: 'transparent',
     borderTopColor: 'transparent',
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
+    display: 'flex',
+    paddingLeft: '2%',
+    textAlign: 'center',
+    marginLeft: '30%',
 
   },
   piker_item: {
-    height: 17,
+    width: '80%',
+    
     backgroundColor: '#126e51',
     color: '#FFF',
-    shadowColor: '#000',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     textAlign: 'center',
+    fontSize: 20,
+    
+
   },
-
-
-
 
 
 
@@ -211,6 +259,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     width: '100%',
     color: '#fff',
+    marginTop: 2,
 
   },
   game_info: {

@@ -1,61 +1,49 @@
-import React, { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import React, { useState } from 'react';
 import { View, StyleSheet, Image, Text, Dimensions } from 'react-native';
-import { RiUserSettingsFill } from 'react-icons/ri';
-import { Turn as Hamburger } from 'hamburger-react';
 import Modal from 'react-native-modal';
-
-
+import { faBars } from '@fortawesome/free-solid-svg-icons'
+import { IconButton } from 'react-native-paper';
 
 export default function Header() {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const openMenu = () => {
-    setIsModalVisible(true);
-    setIsMenuOpen(true);
+  const [isModalVisible, setModalVisible] = useState(false);
 
-  };
+  function openModal() {
+    setModalVisible(true);
+  }
+  function closeModal() {
+    setModalVisible(false);
+  }
 
-  const closeMenu = () => {
-    setIsModalVisible(false);
-    setIsMenuOpen(false);
-  };
+  function hamburgerMenuIcon() {
 
-  useEffect(() => {
-    setToggled(isMenuOpen);
-  }, [isMenuOpen]);
+    return (
+      <FontAwesomeIcon icon={faBars} size={30} color="#fff" />
+    )
+  }
 
-  const [toggled, setToggled] = useState(false);
 
   return (
     <View style={styles.container_main}>
       <View style={styles.hamburger_menu}>
-        <Hamburger size={24} color="#fff" toggled={toggled} toggle={setToggled} onToggle={toggled => {
-          if (toggled) {
-            // open a menu
-            openMenu();
-            toggled = false;
-          } else {
-            // close a menu
-            closeMenu();
-            toggled = false;
-          }
-        }} />
+        <IconButton icon={hamburgerMenuIcon} onPress={openModal} />
       </View>
+      <Modal isVisible={isModalVisible} onBackdropPress={closeModal} style={styles.modal} animationIn="fadeInLeft" animationOut="fadeOutLeft" > 
+        <View  style={[styles.menuItems, { width: '100%' }]}>
 
-      <Image style={styles.logo_img} source={require('../../imgs/beta-app-logo.png')} />
-
-      <View style={styles.userConfig}>
-        <RiUserSettingsFill size={30} color="#fff" />
-      </View>
-
-      <Modal isVisible={isModalVisible} onBackdropPress={closeMenu} style={styles.modal} animationIn="fadeInRight" animationOut="fadeOutRight">
-        <View style={[styles.menuItems, { width: '100%' }]}>
           <Text style={styles.menuItem}>Menu Item 1</Text>
           <Text style={styles.menuItem}>Menu Item 2</Text>
           <Text style={styles.menuItem}>Menu Item 3</Text>
         </View>
       </Modal>
+
+      <Image style={styles.logo_img} source={require('../../imgs/beta-app-logo.png')} />
+
+      <View style={styles.userConfig}>
+
+      </View>
+
     </View>
   );
 
@@ -69,12 +57,12 @@ const styles = StyleSheet.create({
     display: 'flex',
     height: 'auto',
     width: '100%',
+    paddingTop: 15,
   },
   logo_img: {
     height: 60,
     width: 80,
-    marginTop: 10,
-    marginBottom: 10,
+    marginTop: 13,
     justifyContent: 'center',
     display: 'flex',
     marginLeft: 'auto',
