@@ -1,3 +1,5 @@
+import { View } from "react-native"
+
 {dataFilter.length == 0 &&
 
   (
@@ -19,13 +21,13 @@ if (item.infoSection?.idInfo != null || undefined) {
 for (let index = 0; index < item.infoSection?.idInfo.length; index++) {
   return (
       <>
-          <Text key={item.infoSection.idInfo} style={styles.game_info}>
-              <Text style={styles.country_flag}></Text>
+          <View  style={styles.game_info}>
+              <View style={styles.country_flag}></View>
               <Text style={styles.game_info_text}>
-                  <Text key={"Contry" + item.infoSection.country } style={styles.text}>{item.infoSection.country}</Text>
-                  <Text key={item.infoSection.league} style={styles.text}>{item.infoSection.league}</Text>
+                  <Text  style={styles.text}>Alemanha</Text>
+                  <Text style={styles.text}>Bundesleague</Text>
               </Text>
-          </Text>
+          </View>
       </>
   )
 }

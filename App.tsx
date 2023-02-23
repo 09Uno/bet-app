@@ -136,21 +136,53 @@ export default function App() {
             </View>
 
           </View>
+
           <View style={styles.games}>
+
             <View style={styles.game_info}>
-
-
-              <View style={styles.country_flag}>
-
-              </View>
-
+              <View style={styles.country_flag}></View>
               <View style={styles.game_info_text}>
-                <Text style={styles.text_league}>CAMPEOPNATO</Text>
+                <Text style={styles.text}>Alemanha</Text>
+                <Text style={styles.text}>Bundesleague</Text>
               </View>
+            </View>
 
+
+
+
+            <View style={styles.game_section}>
+              <View style={styles.game_match}>
+                <View style={styles.game_time}>
+                  <Text style={styles.text} >ENCERRADO</Text>
+                </View>
+                <View style={styles.game_team}>
+                  <View style={styles.team}>
+                    <View style={styles.team_brand}>
+                    </View>
+                    <Text style={styles.text} >Atletico Mineiro</Text>
+                  </View>
+                  <View style={styles.team}>
+                    <View style={styles.team_brand}>
+                    </View>
+                    <Text style={styles.text}>Raja caza Blanca</Text>
+                  </View>
+                </View>
+                <View style={styles.score}>
+                  <View style={styles.team}>
+                    <Text style={styles.text}>2</Text>
+                  </View>
+                  <View style={styles.team}>
+                    <Text style={styles.text}>5</Text>
+                  </View>
+                </View>
+
+              </View>
 
 
             </View>
+
+
+
             <View style={styles.game_section}>
               <View style={styles.game_match}>
                 <View style={styles.game_time}>
@@ -160,7 +192,7 @@ export default function App() {
                   <View style={styles.team}>
                     <View style={styles.team_brand}>
                     </View>
-                    <Text style={styles.text}  >Home</Text>
+                    <Text style={styles.text} >Home</Text>
                   </View>
                   <View style={styles.team}>
                     <View style={styles.team_brand}>
@@ -177,15 +209,89 @@ export default function App() {
                   </View>
                 </View>
 
+              </View>
 
 
+            </View>
+
+
+
+
+
+                
+            <View style={styles.game_section}>
+              <View style={styles.game_match}>
+                <View style={styles.game_time}>
+                  <Text style={styles.text} >Hora</Text>
+                </View>
+                <View style={styles.game_team}>
+                  <View style={styles.team}>
+                    <View style={styles.team_brand}>
+                    </View>
+                    <Text style={styles.text} >Home</Text>
+                  </View>
+                  <View style={styles.team}>
+                    <View style={styles.team_brand}>
+                    </View>
+                    <Text style={styles.text}>Away</Text>
+                  </View>
+                </View>
+                <View style={styles.score}>
+                  <View style={styles.team}>
+                    <Text style={styles.text}>2</Text>
+                  </View>
+                  <View style={styles.team}>
+                    <Text style={styles.text}>5</Text>
+                  </View>
+                </View>
 
               </View>
+
+
+            </View>
+
+
+
+
+
+
+
+
+            <View style={styles.game_section}>
+              <View style={styles.game_match}>
+                <View style={styles.game_time}>
+                  <Text style={styles.text} >Hora</Text>
+                </View>
+                <View style={styles.game_team}>
+                  <View style={styles.team}>
+                    <View style={styles.team_brand}>
+                    </View>
+                    <Text style={styles.text} >Home</Text>
+                  </View>
+                  <View style={styles.team}>
+                    <View style={styles.team_brand}>
+                    </View>
+                    <Text style={styles.text}>Away</Text>
+                  </View>
+                </View>
+                <View style={styles.score}>
+                  <View style={styles.team}>
+                    <Text style={styles.text}>2</Text>
+                  </View>
+                  <View style={styles.team}>
+                    <Text style={styles.text}>5</Text>
+                  </View>
+                </View>
+
+              </View>
+
+
             </View>
           </View>
-
         </View>
+
       </View>
+
     </>
   );
 }
@@ -209,7 +315,7 @@ const styles = StyleSheet.create({
   container: {
 
     display: 'flex',
-    backgroundColor: '#000000d9',
+    backgroundColor: 'g',
     alignItems: 'center',
     justifyContent: 'flex-start',
     width: '100%',
@@ -320,6 +426,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
+    marginTop: 10,
   },
   game_info: {
     display: 'flex',
@@ -327,19 +434,17 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     width: '100%',
-    height: 'auto',
-    backgroundColor: '#3f8872',
+    height: 90,
+    backgroundColor: '#585858',
     padding: 10,
-    marginTop: 10,
-    marginBottom: 7,
+    paddingTop: 20,
 
   },
   game_info_text: {
     display: 'flex',
     flexDirection: 'column',
-    marginRight: 40,
+    marginRight: 90,
     textAlign: 'end',
-    marginTop: 12,
   },
   game_country: {
   },
@@ -347,24 +452,24 @@ const styles = StyleSheet.create({
 
   },
   country_flag: {
-    width: 50,
+    width: 70,
     height: 50,
     backgroundColor: 'blue',
-    marginRight: 6,
-    marginLeft: 17,
+    marginRight: 30,
+    marginLeft: 5,
+
   },
   game_section: {
     padding: 2,
-    marginLeft: 5,
-    marginRight: 5,
-    marginTop: 3,
-    width: '98%',
+
+    width: '100%',
     height: 120,
-    backgroundColor: '#126e51',
+    backgroundColor: '#3f3d3d',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    borderRadius: 5,
+    borderBottomColor: '#126e51',
+    borderBottomWidth: 3,
 
   },
   game_date: {
@@ -382,13 +487,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: 5,
     marginRight: 5,
-    width: 70,
+    width:116,
 
   },
   game_team: {
     display: 'flex',
     flexDirection: 'column',
-    width: '70%',
+    width: '62%',
     height: 'auto',
     paddingTop: 15,
     paddingLeft: 15,
@@ -396,9 +501,9 @@ const styles = StyleSheet.create({
     color: '#fff',
     marginLeft: 5,
     justifyContent: 'center',
-    borderLeftColor: '#fff',
+    borderLeftColor: '#eeeeee17',
     borderLeftWidth: 1,
-    borderRightColor: '#fff',
+    borderRightColor: '#eeeeee17',
     borderRightWidth: 1,
 
   },
