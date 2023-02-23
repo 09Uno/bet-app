@@ -70,3 +70,32 @@ for (let index2 = 0; index2 < item.games?.idGame.length; index2++) {
 }
 })}
 
+<View style={styles.game_section}>
+<Text style={styles.game_match}>
+  <Text style={styles.game_time}>
+    <Text style={styles.text} >Hora</Text>
+  </Text>
+  <Text style={styles.breakLine}></Text>
+  <Text style={styles.game_team}>
+    <Text style={styles.team}>
+      <Text style={styles.team_brand}>
+      </Text>
+      <Text style={styles.text}  >Home</Text>
+    </Text>
+    <Text style={styles.team}>
+      <Text style={styles.team_brand}>
+      </Text>
+      <Text style={styles.text}>Away</Text>
+    </Text>
+  </Text>
+  <Text style={styles.breakLine}></Text>
+  <Text style={styles.score}>
+    <Text style={styles.team}>
+      <Text style={styles.text}>2</Text>
+    </Text>
+    <Text style={styles.team}>
+      <Text style={styles.text}>5</Text>
+    </Text>
+  </Text>
+</Text>
+</View>

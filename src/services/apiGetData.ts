@@ -8,9 +8,9 @@ export function ApiRapid() {
         const apiRapid = axios.create({
 
 
-            baseURL: 'https://api-football-v1.p.rapidapi.co/',
+            baseURL: '',
             headers: {
-                'X-RapidAPI-Key': '',
+                'X-RapidAPI-Key': '6c388cc7d6msh6472b709a3bd129p177bc8jsna3fc13ce99aa',
                 'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com'
             }
 

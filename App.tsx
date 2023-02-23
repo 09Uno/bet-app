@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Header from './src/components/header/Header';
 import GamesData from './src/services/requestDataFromApi/getGamesFromApi';
@@ -7,13 +7,13 @@ import { GamesToUseProps } from './src/services/requestDataFromApi/getGamesFromA
 import { Picker } from '@react-native-picker/picker';
 import moment from 'moment';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import {  IconButton } from 'react-native-paper';
+import { IconButton } from 'react-native-paper';
 import { IconCalendar } from './src/components/icons/Icons';
 
 
 export default function App() {
 
-  
+
 
   const [gamesToUse, setGamesToUse] = useState<GamesToUseProps[] | null | undefined>(null);
   const [dates, setDates] = useState<string[]>([]);
@@ -29,13 +29,13 @@ export default function App() {
     setDatePickerVisibility(false);
   };
 
-  function handleConfirm (date : Date){
+  function handleConfirm(date: Date) {
     const DateToReturn = moment(date).format('YYYY-MM-DD');
     handleDateSelected(DateToReturn)
     hideDatePicker();
   };
 
-  
+
   useEffect(() => {
 
     const dataBase = moment();
@@ -64,7 +64,7 @@ export default function App() {
     setDate(datePicked);
   }
 
- 
+
 
   useEffect(() => {
     try {
@@ -89,21 +89,23 @@ export default function App() {
       <View style={styles.container}>
         <Header />
         <View style={styles.game_main}>
+
+
           <View style={styles.section_filter}>
 
             <View style={styles.calendar_item}>
-            
 
 
-               <DateTimePickerModal
+
+              <DateTimePickerModal
                 isVisible={isDatePickerVisible}
                 mode="date"
                 onConfirm={handleConfirm}
                 onCancel={hideDatePicker}
               />
-              
+
               <IconButton size={50} icon={iconCalendar} onPress={showDatePicker} style={styles.calendar_button} />
-            
+
 
               <Picker style={styles.picker}
                 mode="dialog"
@@ -130,12 +132,58 @@ export default function App() {
 
 
               </Picker>
+
+            </View>
+
+          </View>
+          <View style={styles.games}>
+            <View style={styles.game_info}>
+
+
+              <View style={styles.country_flag}>
+
+              </View>
+
+              <View style={styles.game_info_text}>
+                <Text style={styles.text_league}>CAMPEOPNATO</Text>
+              </View>
+
+
+
+            </View>
+            <View style={styles.game_section}>
+              <View style={styles.game_match}>
+                <View style={styles.game_time}>
+                  <Text style={styles.text} >Hora</Text>
+                </View>
+                <View style={styles.game_team}>
+                  <View style={styles.team}>
+                    <View style={styles.team_brand}>
+                    </View>
+                    <Text style={styles.text}  >Home</Text>
+                  </View>
+                  <View style={styles.team}>
+                    <View style={styles.team_brand}>
+                    </View>
+                    <Text style={styles.text}>Away</Text>
+                  </View>
+                </View>
+                <View style={styles.score}>
+                  <View style={styles.team}>
+                    <Text style={styles.text}>2</Text>
+                  </View>
+                  <View style={styles.team}>
+                    <Text style={styles.text}>5</Text>
+                  </View>
+                </View>
+
+
+
+
+              </View>
             </View>
           </View>
 
-            
-
-         
         </View>
       </View>
     </>
@@ -147,14 +195,21 @@ const styles = StyleSheet.create({
 
   text: {
     color: '#fff',
-    fontSize: 16,
-    fontWeight: '500',
+    fontSize: 20,
+    fontWeight: '600',
   },
+  text_league: {
+    color: '#fff',
 
+    fontSize: 25,
+    fontWeight: '600',
+    marginLeft: 22
+  }
+  ,
   container: {
 
     display: 'flex',
-    backgroundColor: '#404046',
+    backgroundColor: '#000000d9',
     alignItems: 'center',
     justifyContent: 'flex-start',
     width: '100%',
@@ -211,9 +266,9 @@ const styles = StyleSheet.create({
 
   },
   calendar_button: {
-   
-  
-    
+
+
+
 
   },
   picker: {
@@ -235,7 +290,7 @@ const styles = StyleSheet.create({
   },
   piker_item: {
     width: '80%',
-    
+
     backgroundColor: '#126e51',
     color: '#FFF',
     display: 'flex',
@@ -243,7 +298,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     textAlign: 'center',
     fontSize: 20,
-    
+
 
   },
 
@@ -258,6 +313,14 @@ const styles = StyleSheet.create({
     borderTopWidth: 2,
 
   },
+
+  games: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+  },
   game_info: {
     display: 'flex',
     flexDirection: 'row',
@@ -265,22 +328,18 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     width: '100%',
     height: 'auto',
-    backgroundColor: '#505050',
+    backgroundColor: '#3f8872',
     padding: 10,
-    marginBottom: 3,
-    borderBottomWidth: 2,
-    borderBottomColor: '#126e51',
-
-    borderTopWidth: 2,
-    borderTopColor: '#126e51',
+    marginTop: 10,
+    marginBottom: 7,
 
   },
   game_info_text: {
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
     marginRight: 40,
-
+    textAlign: 'end',
+    marginTop: 12,
   },
   game_country: {
   },
@@ -288,21 +347,24 @@ const styles = StyleSheet.create({
 
   },
   country_flag: {
-
+    width: 50,
+    height: 50,
+    backgroundColor: 'blue',
+    marginRight: 6,
+    marginLeft: 17,
   },
   game_section: {
     padding: 2,
-    flex: 1,
-    marginLeft: 10,
-    marginRight: 10,
-    marginBottom: 3,
-    width: 'auto',
-    height: 'auto',
-    backgroundColor: '#404046',
+    marginLeft: 5,
+    marginRight: 5,
+    marginTop: 3,
+    width: '98%',
+    height: 120,
+    backgroundColor: '#126e51',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-
+    borderRadius: 5,
 
   },
   game_date: {
@@ -326,11 +388,18 @@ const styles = StyleSheet.create({
   game_team: {
     display: 'flex',
     flexDirection: 'column',
-    width: 220,
+    width: '70%',
     height: 'auto',
-    marginTop: 5,
-    marginBottom: 5,
+    paddingTop: 15,
+    paddingLeft: 15,
+    paddingBottom: 15,
     color: '#fff',
+    marginLeft: 5,
+    justifyContent: 'center',
+    borderLeftColor: '#fff',
+    borderLeftWidth: 1,
+    borderRightColor: '#fff',
+    borderRightWidth: 1,
 
   },
   score: {
@@ -340,6 +409,8 @@ const styles = StyleSheet.create({
     marginBottom: 'auto',
     marginLeft: 5,
     marginRight: 5,
+    width: '10%',
+    padding: 5,
   },
   game_match: {
     display: 'flex',
@@ -348,31 +419,25 @@ const styles = StyleSheet.create({
   team: {
     display: 'flex',
     flexDirection: 'row',
+    margin: 5,
+
   },
   team_name: {
-    marginTop: 'auto',
-    marginBottom: 'auto',
+
     fontSize: 15,
     color: '#fff',
+    marginLeft: 10,
   },
-  breakLine: {
-    width: 1,
-    height: "100%",
-    backgroundColor: '#fff',
-    marginLeft: 5,
-    marginRight: 5,
-    color: '#fff',
 
-
-  },
   team_brand: {
     display: 'flex',
     marginLeft: 3,
-    marginRight: 3,
-    width: 23,
-    height: 23,
+    marginRight: 15,
+    width: 30,
+    height: 30,
     position: 'relative',
     margin: 2,
+    backgroundColor: "blue",
 
 
 
