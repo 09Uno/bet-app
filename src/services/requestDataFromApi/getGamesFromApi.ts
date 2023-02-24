@@ -38,7 +38,7 @@ export interface GamesToUseProps {
 export default async function GamesData(date: string) {
   try {
 
-    const dateString : string = await date;
+    const dateString : string =  date;
     // console.log(dateString + "dateString");
     const response = await apiRapid?.get(`fixtures/date/${dateString}`);
     const games: Game[] = response?.data.api.fixtures
@@ -81,8 +81,8 @@ export default async function GamesData(date: string) {
       } as GamesToUseProps;
     });
     
-    console.log(gamesToUseProps);
     const gamesToUse = await Promise.all(gamesToUseProps);
+    console.log(gamesToUseProps);
     // console.log(gamesToUseProps);
     // console.log(gamesToUse);
     return gamesToUse;

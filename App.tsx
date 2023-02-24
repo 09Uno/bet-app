@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Text, FlatList } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Header from './src/components/header/Header';
 import GamesData from './src/services/requestDataFromApi/getGamesFromApi';
@@ -7,13 +7,13 @@ import { GamesToUseProps } from './src/services/requestDataFromApi/getGamesFromA
 import { Picker } from '@react-native-picker/picker';
 import moment from 'moment';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { IconButton } from 'react-native-paper';
+import {  IconButton } from 'react-native-paper';
 import { IconCalendar } from './src/components/icons/Icons';
 
 
 export default function App() {
 
-
+  
 
   const [gamesToUse, setGamesToUse] = useState<GamesToUseProps[] | null | undefined>(null);
   const [dates, setDates] = useState<string[]>([]);
@@ -29,13 +29,13 @@ export default function App() {
     setDatePickerVisibility(false);
   };
 
-  function handleConfirm(date: Date) {
+  function handleConfirm (date : Date){
     const DateToReturn = moment(date).format('YYYY-MM-DD');
     handleDateSelected(DateToReturn)
     hideDatePicker();
   };
 
-
+  
   useEffect(() => {
 
     const dataBase = moment();
@@ -64,7 +64,7 @@ export default function App() {
     setDate(datePicked);
   }
 
-
+ 
 
   useEffect(() => {
     try {
@@ -89,23 +89,21 @@ export default function App() {
       <View style={styles.container}>
         <Header />
         <View style={styles.game_main}>
-
-
           <View style={styles.section_filter}>
 
             <View style={styles.calendar_item}>
+            
 
 
-
-              <DateTimePickerModal
+               <DateTimePickerModal
                 isVisible={isDatePickerVisible}
                 mode="date"
                 onConfirm={handleConfirm}
                 onCancel={hideDatePicker}
               />
-
+              
               <IconButton size={50} icon={iconCalendar} onPress={showDatePicker} style={styles.calendar_button} />
-
+            
 
               <Picker style={styles.picker}
                 mode="dialog"
@@ -132,18 +130,19 @@ export default function App() {
 
 
               </Picker>
-
             </View>
-
           </View>
+
+            
+
 
           <View style={styles.games}>
 
             <View style={styles.game_info}>
               <View style={styles.country_flag}></View>
               <View style={styles.game_info_text}>
-                <Text style={styles.text}>Alemanha</Text>
                 <Text style={styles.text}>Bundesleague</Text>
+                <Text style={styles.text}>Alemanhaaa</Text>
               </View>
             </View>
 
@@ -153,26 +152,26 @@ export default function App() {
             <View style={styles.game_section}>
               <View style={styles.game_match}>
                 <View style={styles.game_time}>
-                  <Text style={styles.text} >ENCERRADO</Text>
+                  <Text style={styles.game_time_text} >Encerrado</Text>
                 </View>
                 <View style={styles.game_team}>
                   <View style={styles.team}>
                     <View style={styles.team_brand}>
                     </View>
-                    <Text style={styles.text} >Atletico Mineiro</Text>
+                    <Text style={styles.team_name} >Atletico Mineiro</Text>
                   </View>
                   <View style={styles.team}>
                     <View style={styles.team_brand}>
                     </View>
-                    <Text style={styles.text}>Raja caza Blanca</Text>
+                    <Text style={styles.team_name}>Raja caza Blanca</Text>
                   </View>
                 </View>
                 <View style={styles.score}>
                   <View style={styles.team}>
-                    <Text style={styles.text}>2</Text>
+                    <Text style={styles.text_score}>2</Text>
                   </View>
                   <View style={styles.team}>
-                    <Text style={styles.text}>5</Text>
+                    <Text style={styles.text_score}>5</Text>
                   </View>
                 </View>
 
@@ -181,135 +180,32 @@ export default function App() {
 
             </View>
 
-
-
-            <View style={styles.game_section}>
-              <View style={styles.game_match}>
-                <View style={styles.game_time}>
-                  <Text style={styles.text} >Hora</Text>
-                </View>
-                <View style={styles.game_team}>
-                  <View style={styles.team}>
-                    <View style={styles.team_brand}>
-                    </View>
-                    <Text style={styles.text} >Home</Text>
-                  </View>
-                  <View style={styles.team}>
-                    <View style={styles.team_brand}>
-                    </View>
-                    <Text style={styles.text}>Away</Text>
-                  </View>
-                </View>
-                <View style={styles.score}>
-                  <View style={styles.team}>
-                    <Text style={styles.text}>2</Text>
-                  </View>
-                  <View style={styles.team}>
-                    <Text style={styles.text}>5</Text>
-                  </View>
                 </View>
 
-              </View>
-
-
-            </View>
-
-
-
-
-
-                
-            <View style={styles.game_section}>
-              <View style={styles.game_match}>
-                <View style={styles.game_time}>
-                  <Text style={styles.text} >Hora</Text>
-                </View>
-                <View style={styles.game_team}>
-                  <View style={styles.team}>
-                    <View style={styles.team_brand}>
-                    </View>
-                    <Text style={styles.text} >Home</Text>
-                  </View>
-                  <View style={styles.team}>
-                    <View style={styles.team_brand}>
-                    </View>
-                    <Text style={styles.text}>Away</Text>
-                  </View>
-                </View>
-                <View style={styles.score}>
-                  <View style={styles.team}>
-                    <Text style={styles.text}>2</Text>
-                  </View>
-                  <View style={styles.team}>
-                    <Text style={styles.text}>5</Text>
-                  </View>
-                </View>
-
-              </View>
-
-
-            </View>
-
-
-
-
-
-
-
-
-            <View style={styles.game_section}>
-              <View style={styles.game_match}>
-                <View style={styles.game_time}>
-                  <Text style={styles.text} >Hora</Text>
-                </View>
-                <View style={styles.game_team}>
-                  <View style={styles.team}>
-                    <View style={styles.team_brand}>
-                    </View>
-                    <Text style={styles.text} >Home</Text>
-                  </View>
-                  <View style={styles.team}>
-                    <View style={styles.team_brand}>
-                    </View>
-                    <Text style={styles.text}>Away</Text>
-                  </View>
-                </View>
-                <View style={styles.score}>
-                  <View style={styles.team}>
-                    <Text style={styles.text}>2</Text>
-                  </View>
-                  <View style={styles.team}>
-                    <Text style={styles.text}>5</Text>
-                  </View>
-                </View>
-
-              </View>
-
-
-            </View>
-          </View>
+         
         </View>
-
       </View>
-
     </>
   );
 }
-
 
 const styles = StyleSheet.create({
 
   text: {
     color: '#fff',
-    fontSize: 20,
+    fontSize: 15,
     fontWeight: '600',
+    alignContent: 'center',
+    marginTop: 'auto',
   },
   text_league: {
     color: '#fff',
 
     fontSize: 25,
     fontWeight: '600',
-    marginLeft: 22
+    marginLeft: 10,
+    display: 'flex',
+     alignItems : 'flex-start', 
   }
   ,
   container: {
@@ -361,7 +257,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 5,
     textAlign: 'center',
-    width: '70%',
+    width: '100%',
     flexDirection: 'row',
     borderColor: '#3f8872',
     borderBottomColor: '#3f8872',
@@ -373,12 +269,12 @@ const styles = StyleSheet.create({
   },
   calendar_button: {
 
-
-
+    width: '10%',
+    
 
   },
   picker: {
-    width: "91%",
+    width: "90%",
     height: 10,
     color: '#FFF',
     backgroundColor: '#126e51',
@@ -389,13 +285,12 @@ const styles = StyleSheet.create({
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
     display: 'flex',
-    paddingLeft: '2%',
+    paddingLeft: '3%',
     textAlign: 'center',
-    marginLeft: '30%',
-
+    alignItems: 'center',
   },
   piker_item: {
-    width: '80%',
+    width: '0',
 
     backgroundColor: '#126e51',
     color: '#FFF',
@@ -404,7 +299,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     textAlign: 'center',
     fontSize: 20,
-
+    paddingLeft: 'auto',
+    marginLeft: 'auto',
+    margin: 4,
 
   },
 
@@ -434,10 +331,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     width: '100%',
-    height: 90,
+    height: 70,
     backgroundColor: '#585858',
     padding: 10,
-    paddingTop: 20,
+    paddingTop: 15
 
   },
   game_info_text: {
@@ -445,6 +342,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     marginRight: 90,
     textAlign: 'end',
+    
   },
   game_country: {
   },
@@ -452,10 +350,10 @@ const styles = StyleSheet.create({
 
   },
   country_flag: {
-    width: 70,
-    height: 50,
+    width: 50,
+    height: 40,
     backgroundColor: 'blue',
-    marginRight: 30,
+    marginRight: 25,
     marginLeft: 5,
 
   },
@@ -463,7 +361,7 @@ const styles = StyleSheet.create({
     padding: 2,
 
     width: '100%',
-    height: 120,
+    height: 100,
     backgroundColor: '#3f3d3d',
     display: 'flex',
     flexDirection: 'row',
@@ -487,8 +385,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: 5,
     marginRight: 5,
-    width:116,
+    width: '20%',
 
+  },
+  game_time_text: {
+    color: '#fff',
+    fontSize: 15,
+    fontWeight: '600',
+    textAlign: 'center',
   },
   game_team: {
     display: 'flex',
@@ -524,14 +428,25 @@ const styles = StyleSheet.create({
   team: {
     display: 'flex',
     flexDirection: 'row',
-    margin: 5,
+    marginTop: 4, 
+    marginBottom: 3,
 
   },
+  text_score: {
+    color: '#fff',
+    fontSize: 20,
+    marginBottom: 3,
+    marginTop: 3,
+  },
   team_name: {
-
+    textAlign: 'center',
     fontSize: 15,
     color: '#fff',
-    marginLeft: 10,
+    marginLeft: 0,
+    display: 'flex',
+    position: 'relative',
+    marginTop: 'auto',
+    paddingBottom: 3,
   },
 
   team_brand: {
