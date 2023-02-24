@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, ListRenderItem } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Header from './src/components/header/Header';
 import GamesData from './src/services/requestDataFromApi/getGamesFromApi';
@@ -7,13 +7,13 @@ import { GamesToUseProps } from './src/services/requestDataFromApi/getGamesFromA
 import { Picker } from '@react-native-picker/picker';
 import moment from 'moment';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import {  IconButton } from 'react-native-paper';
+import { IconButton } from 'react-native-paper';
 import { IconCalendar } from './src/components/icons/Icons';
-
+import { FlatList } from 'react-native/Libraries/Lists/FlatList';
 
 export default function App() {
 
-  
+
 
   const [gamesToUse, setGamesToUse] = useState<GamesToUseProps[] | null | undefined>(null);
   const [dates, setDates] = useState<string[]>([]);
@@ -29,13 +29,13 @@ export default function App() {
     setDatePickerVisibility(false);
   };
 
-  function handleConfirm (date : Date){
+  function handleConfirm(date: Date) {
     const DateToReturn = moment(date).format('YYYY-MM-DD');
     handleDateSelected(DateToReturn)
     hideDatePicker();
   };
 
-  
+
   useEffect(() => {
 
     const dataBase = moment();
@@ -64,13 +64,14 @@ export default function App() {
     setDate(datePicked);
   }
 
- 
+
 
   useEffect(() => {
     try {
       async function gamesToday() {
         const gamesToday = await GamesData(date);
         setGamesToUse(gamesToday);
+        console.log(gamesToday);
       }
       gamesToday().then(() => {
 
@@ -82,28 +83,60 @@ export default function App() {
   }, [date]);
 
 
+  function GamesComponent( item : ListRenderItem<GamesToUseProps> ) {
+    return (
+      <View style={styles.game_section}>
+        <View style={styles.game_match}>
+          <View style={styles.game_time}>
+            <Text style={styles.game_time_text}>{item}</Text>
+          </View>
+          <View style={styles.game_team}>
+            <View style={styles.team}>
+              <Image source={{ uri: homeTeamLogo }} style={styles.team_brand} />
+              <Text style={styles.team_name}>{item.homeTeam}</Text>
+            </View>
+            <View style={styles.team}>
+              <Image source={{ uri: awayTeamLogo }} style={styles.team_brand} />
+              <Text style={styles.team_name}>{game.awayTeam}</Text>
+            </View>
+          </View>
+          <View style={styles.score}>
+            <View style={styles.team}>
+              <Text style={styles.text_score}>{game.goalsHomeTeam}</Text>
+            </View>
+            <View style={styles.team}>
+              <Text style={styles.text_score}>{game.goalsAwayTeam}</Text>
+            </View>
+          </View>
+        </View>
+      </View>
+    );
+  }
+  
+
+
+
   return (
     <>
       <StatusBar backgroundColor="#3f8872" />
-
       <View style={styles.container}>
         <Header />
         <View style={styles.game_main}>
           <View style={styles.section_filter}>
 
             <View style={styles.calendar_item}>
-            
 
 
-               <DateTimePickerModal
+
+              <DateTimePickerModal
                 isVisible={isDatePickerVisible}
                 mode="date"
                 onConfirm={handleConfirm}
                 onCancel={hideDatePicker}
               />
-              
+
               <IconButton size={50} icon={iconCalendar} onPress={showDatePicker} style={styles.calendar_button} />
-            
+
 
               <Picker style={styles.picker}
                 mode="dialog"
@@ -133,56 +166,34 @@ export default function App() {
             </View>
           </View>
 
-            
 
 
           <View style={styles.games}>
 
-            <View style={styles.game_info}>
+            {/* <View style={styles.game_info}>
               <View style={styles.country_flag}></View>
               <View style={styles.game_info_text}>
                 <Text style={styles.text}>Bundesleague</Text>
                 <Text style={styles.text}>Alemanhaaa</Text>
               </View>
-            </View>
+            </View> */}
 
 
+            <FlatList
+              data={gamesToUse}
+              keyExtractor={(item) => item.game.fixture_id}
+              renderItem={({ item }) => (
+                <GamesComponent
+                  item={item.game}
+                  
+              
+                 />
+              )}
+            />
+            
+          </View>
 
 
-            <View style={styles.game_section}>
-              <View style={styles.game_match}>
-                <View style={styles.game_time}>
-                  <Text style={styles.game_time_text} >Encerrado</Text>
-                </View>
-                <View style={styles.game_team}>
-                  <View style={styles.team}>
-                    <View style={styles.team_brand}>
-                    </View>
-                    <Text style={styles.team_name} >Atletico Mineiro</Text>
-                  </View>
-                  <View style={styles.team}>
-                    <View style={styles.team_brand}>
-                    </View>
-                    <Text style={styles.team_name}>Raja caza Blanca</Text>
-                  </View>
-                </View>
-                <View style={styles.score}>
-                  <View style={styles.team}>
-                    <Text style={styles.text_score}>2</Text>
-                  </View>
-                  <View style={styles.team}>
-                    <Text style={styles.text_score}>5</Text>
-                  </View>
-                </View>
-
-              </View>
-
-
-            </View>
-
-                </View>
-
-         
         </View>
       </View>
     </>
@@ -205,7 +216,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginLeft: 10,
     display: 'flex',
-     alignItems : 'flex-start', 
+    alignItems: 'flex-start',
   }
   ,
   container: {
@@ -270,7 +281,7 @@ const styles = StyleSheet.create({
   calendar_button: {
 
     width: '10%',
-    
+
 
   },
   picker: {
@@ -342,7 +353,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     marginRight: 90,
     textAlign: 'end',
-    
+
   },
   game_country: {
   },
@@ -428,7 +439,7 @@ const styles = StyleSheet.create({
   team: {
     display: 'flex',
     flexDirection: 'row',
-    marginTop: 4, 
+    marginTop: 4,
     marginBottom: 3,
 
   },

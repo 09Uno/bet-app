@@ -1,6 +1,6 @@
 import { apiRapid } from '../setupApi'
 
-export interface Game {
+ interface Game {
 
   [id: string]: {
     fixture_id: string;
@@ -27,11 +27,30 @@ export interface Game {
 
 }
 
-
 export interface GamesToUseProps {
-  game : Game;
-  homeTeamLogo:  string;
-  awayTeamLogo:  string
+  game: {
+    fixture_id: string;
+    event_timestamp: string;
+    event_date: string;
+    league_id: string;
+    round: string;
+    homeTeam_id: string;
+    awayTeam_id: string;
+    homeTeam: string;
+    awayTeam: string;
+    status: string;
+    statusShort: string;
+    goalsHomeTeam: string | null;
+    goalsAwayTeam: string | null;
+    halftime_score: string | null;
+    final_score: string | null;
+    penalty: string;
+    elapsed: string;
+    firstHalfStart: string;
+    secondHalfStart: string;
+  };
+  homeTeamLogo: string;
+  awayTeamLogo: string;
 }
 
 
@@ -39,7 +58,7 @@ export default async function GamesData(date: string) {
   try {
 
     const dateString : string =  date;
-    // console.log(dateString + "dateString");
+    console.log(dateString + "dateString");
     const response = await apiRapid?.get(`fixtures/date/${dateString}`);
     const games: Game[] = response?.data.api.fixtures
 
@@ -84,7 +103,7 @@ export default async function GamesData(date: string) {
     const gamesToUse = await Promise.all(gamesToUseProps);
     console.log(gamesToUseProps);
     // console.log(gamesToUseProps);
-    // console.log(gamesToUse);
+    console.log(gamesToUse);
     return gamesToUse;
   } catch (error) {
     console.log(error);
