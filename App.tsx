@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Text, ListRenderItem } from 'react-native';
+import { StyleSheet, View, Text, ListRenderItem, Image, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Header from './src/components/header/Header';
 import GamesData from './src/services/requestDataFromApi/getGamesFromApi';
@@ -9,7 +9,6 @@ import moment from 'moment';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { IconButton } from 'react-native-paper';
 import { IconCalendar } from './src/components/icons/Icons';
-import { FlatList } from 'react-native/Libraries/Lists/FlatList';
 
 export default function App() {
 
@@ -83,38 +82,38 @@ export default function App() {
   }, [date]);
 
 
-  function GamesComponent( item : ListRenderItem<GamesToUseProps> ) {
+  function GamesComponent(props: GamesToUseProps) {
+    const { game, homeTeamLogo, awayTeamLogo } = props;
     return (
       <View style={styles.game_section}>
         <View style={styles.game_match}>
           <View style={styles.game_time}>
-            <Text style={styles.game_time_text}>{item}</Text>
+            <Text key={'status' + game.fixture_id} style={styles.game_time_text}>{game.status}</Text>
           </View>
           <View style={styles.game_team}>
             <View style={styles.team}>
-              <Image source={{ uri: homeTeamLogo }} style={styles.team_brand} />
-              <Text style={styles.team_name}>{item.homeTeam}</Text>
+              <Image  key={'home brand' + game.fixture_id} style={styles.team_brand} source={{ uri: homeTeamLogo }}  />
+
+              <Text  key={game.homeTeam_id } style={styles.team_name}>{game.homeTeam}</Text>
             </View>
             <View style={styles.team}>
-              <Image source={{ uri: awayTeamLogo }} style={styles.team_brand} />
-              <Text style={styles.team_name}>{game.awayTeam}</Text>
+              <Image  key={'away brand' + game.fixture_id} style={styles.team_brand} source={{ uri: awayTeamLogo }} />
+
+              <Text key={game.awayTeam_id } style={styles.team_name}>{game.awayTeam}</Text>
             </View>
           </View>
           <View style={styles.score}>
             <View style={styles.team}>
-              <Text style={styles.text_score}>{game.goalsHomeTeam}</Text>
+              <Text key={'gols home' + game.fixture_id} style={styles.text_score}>{game.goalsHomeTeam}</Text>
             </View>
             <View style={styles.team}>
-              <Text style={styles.text_score}>{game.goalsAwayTeam}</Text>
+              <Text key={'gols away' + game.fixture_id} style={styles.text_score}>{game.goalsAwayTeam}</Text>
             </View>
           </View>
         </View>
       </View>
     );
   }
-  
-
-
 
   return (
     <>
@@ -181,16 +180,12 @@ export default function App() {
 
             <FlatList
               data={gamesToUse}
-              keyExtractor={(item) => item.game.fixture_id}
+              keyExtractor={(item) => item.game?.fixture_id}
               renderItem={({ item }) => (
-                <GamesComponent
-                  item={item.game}
-                  
-              
-                 />
+                <GamesComponent {...item} />
               )}
             />
-            
+
           </View>
 
 
