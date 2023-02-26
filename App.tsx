@@ -82,32 +82,32 @@ export default function App() {
   }, [date]);
 
 
-  function GamesComponent(props: GamesToUseProps) {
-    const { game, homeTeamLogo, awayTeamLogo } = props;
+  function GamesComponent(props: any) {
+    const { status, fixture_id, homeTeam, awayTeam, goalsAwayTeam, goalsHomeTeam, homeTeamLogo, awayTeamLogo } = props;
     return (
       <View style={styles.game_section}>
         <View style={styles.game_match}>
           <View style={styles.game_time}>
-            <Text key={'status' + game.fixture_id} style={styles.game_time_text}>{game.status}</Text>
+            <Text  style={styles.game_time_text}>{status}</Text>
           </View>
           <View style={styles.game_team}>
             <View style={styles.team}>
-              <Image  key={'home brand' + game.fixture_id} style={styles.team_brand} source={{ uri: homeTeamLogo }}  />
+              <Image   style={styles.team_brand} source={{ uri: homeTeamLogo }}  />
 
-              <Text  key={game.homeTeam_id } style={styles.team_name}>{game.homeTeam}</Text>
+              <Text    style={styles.team_name}>{homeTeam}</Text>
             </View>
             <View style={styles.team}>
-              <Image  key={'away brand' + game.fixture_id} style={styles.team_brand} source={{ uri: awayTeamLogo }} />
+              <Image   style={styles.team_brand} source={{ uri: awayTeamLogo }} />
 
-              <Text key={game.awayTeam_id } style={styles.team_name}>{game.awayTeam}</Text>
+              <Text style={styles.team_name}>{awayTeam}</Text>
             </View>
           </View>
           <View style={styles.score}>
             <View style={styles.team}>
-              <Text key={'gols home' + game.fixture_id} style={styles.text_score}>{game.goalsHomeTeam}</Text>
+              <Text  style={styles.text_score}>{goalsHomeTeam}</Text>
             </View>
             <View style={styles.team}>
-              <Text key={'gols away' + game.fixture_id} style={styles.text_score}>{game.goalsAwayTeam}</Text>
+              <Text  style={styles.text_score}>{goalsAwayTeam}</Text>
             </View>
           </View>
         </View>
