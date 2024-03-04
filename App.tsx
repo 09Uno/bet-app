@@ -1,180 +1,506 @@
 import { StatusBar } from 'expo-status-bar';
-import { FlatList, ScrollView, StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, View, Text, ListRenderItem, Image, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import Header from './src/components/header/Header';
+import GamesData from './src/services/requestDataFromApi/getGamesFromApi';
+import { GamesToUseProps } from './src/services/requestDataFromApi/getGamesFromApi';
+import { Picker } from '@react-native-picker/picker';
+import moment from 'moment';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { IconButton } from 'react-native-paper';
+import { IconCalendar } from './src/components/icons/Icons';
 
 export default function App() {
+
+
+
+  const [gamesToUse, setGamesToUse] = useState<GamesToUseProps[] | null | undefined>(null);
+  const [dates, setDates] = useState<string[]>([]);
+  const [date, setDate] = useState<string>('');
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const iconCalendar = IconCalendar;
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  function handleConfirm(date: Date) {
+    const DateToReturn = moment(date).format('YYYY-MM-DD');
+    handleDateSelected(DateToReturn)
+    hideDatePicker();
+  };
+
+
+  useEffect(() => {
+
+    const dataBase = moment();
+    setDate(dataBase.format('YYYY-MM-DD'));
+
+
+    const daysBeforeToday = 5;
+    const daysAfterToday = 5;
+
+    const datesBeforeToday = Array.from({ length: daysBeforeToday }, (_, i) =>
+      moment(dataBase).subtract(i + 1, 'days').format('YYYY-MM-DD')
+    );
+
+    const datesAfterToday = Array.from({ length: daysAfterToday }, (_, i) =>
+      moment(dataBase).add(i + 1, 'days').format('YYYY-MM-DD')
+    );
+
+    setDates([...datesBeforeToday.reverse(), dataBase.format('YYYY-MM-DD'), ...datesAfterToday]);
+
+  }, []);
+
+
+  function handleDateSelected(date: string) {
+
+    const datePicked = date
+    setDate(datePicked);
+  }
+
+
+
+  useEffect(() => {
+    try {
+      async function gamesToday() {
+        const gamesToday = await GamesData(date);
+        setGamesToUse(gamesToday);
+        console.log(gamesToday);
+      }
+      gamesToday().then(() => {
+
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+  }, [date]);
+
+
+  function GamesComponent(props: any) {
+    const { status, fixture_id, homeTeam, awayTeam, goalsAwayTeam, goalsHomeTeam, homeTeamLogo, awayTeamLogo } = props;
+    return (
+      <View style={styles.game_section}>
+        <View style={styles.game_match}>
+          <View style={styles.game_time}>
+            <Text  style={styles.game_time_text}>{status}</Text>
+          </View>
+          <View style={styles.game_team}>
+            <View style={styles.team}>
+              <Image   style={styles.team_brand} source={{ uri: homeTeamLogo }}  />
+
+              <Text    style={styles.team_name}>{homeTeam}</Text>
+            </View>
+            <View style={styles.team}>
+              <Image   style={styles.team_brand} source={{ uri: awayTeamLogo }} />
+
+              <Text style={styles.team_name}>{awayTeam}</Text>
+            </View>
+          </View>
+          <View style={styles.score}>
+            <View style={styles.team}>
+              <Text  style={styles.text_score}>{goalsHomeTeam}</Text>
+            </View>
+            <View style={styles.team}>
+              <Text  style={styles.text_score}>{goalsAwayTeam}</Text>
+            </View>
+          </View>
+        </View>
+      </View>
+    );
+  }
+
   return (
     <>
-
-      <StatusBar style="auto" />
-
+      <StatusBar backgroundColor="#3f8872" />
       <View style={styles.container}>
+        <Header />
+        <View style={styles.game_main}>
+          <View style={styles.section_filter}>
 
-        <FlatList
-          style={styles.game_main}
-          data={[{
-            key: "test"
-          }]}
-
-          renderItem={({ item }) =>
-            <>
+            <View style={styles.calendar_item}>
 
 
 
-              <View style={styles.game_date}>
+              <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                mode="date"
+                onConfirm={handleConfirm}
+                onCancel={hideDatePicker}
+              />
 
-                <Text>12/12/12</Text>
+              <IconButton size={50} icon={iconCalendar} onPress={showDatePicker} style={styles.calendar_button} />
 
+
+              <Picker style={styles.picker}
+                mode="dialog"
+                selectedValue={date}
+                onValueChange={(date, index) => {
+                  handleDateSelected(date)
+                }
+
+                }
+
+                dropdownIconColor="transparent"
+                dropdownIconRippleColor={'transparent'}
+              >
+
+                {dates.map((date, index) => {
+
+
+                  return (
+
+                    <Picker.Item style={styles.piker_item} label={moment(date).format("DD/MM/YYYY")} value={date} key={index} />
+                  )
+                })
+                }
+
+
+              </Picker>
+            </View>
+          </View>
+
+
+
+          <View style={styles.games}>
+
+            {/* <View style={styles.game_info}>
+              <View style={styles.country_flag}></View>
+              <View style={styles.game_info_text}>
+                <Text style={styles.text}>Bundesleague</Text>
+                <Text style={styles.text}>Alemanhaaa</Text>
               </View>
-
-              <View style={styles.game_section}>
-                <View style={styles.game_section}>
-                  <View style={styles.game_time}>
-
-                    <Text>12:00</Text>
-
-                  </View>
-
-                  <View style={styles.game_macth}>
-                    <View style={styles.team}>
-                      <Text style={styles.team_name}>{item.key}</Text>
-                      <View style={styles.team_brand}></View>
-                    </View>
-
-                    <View style={styles.team}>
-                      <Text style={styles.team_name}>{item.key}</Text>
-                      <View style={styles.team_brand}></View>
-                    </View>
-
-                  </View>
-                </View>
-                <View style={styles.game_icons}>
-                  <View style={styles.tournament}>
-
-                  </View>
-
-                  <View style={styles.country}>
-
-                  </View>
-                </View>
-              </View>
+            </View> */}
 
 
+            <FlatList
+              data={gamesToUse}
+              keyExtractor={(item) => item.game?.fixture_id}
+              renderItem={({ item }) => (
+                <GamesComponent {...item} />
+              )}
+            />
+
+          </View>
 
 
-
-
-            </>
-
-
-          }
-
-        />
-
+        </View>
       </View>
-
-
     </>
   );
 }
 
 const styles = StyleSheet.create({
+
+  text: {
+    color: '#fff',
+    fontSize: 15,
+    fontWeight: '600',
+    alignContent: 'center',
+    marginTop: 'auto',
+  },
+  text_league: {
+    color: '#fff',
+
+    fontSize: 25,
+    fontWeight: '600',
+    marginLeft: 10,
+    display: 'flex',
+    alignItems: 'flex-start',
+  }
+  ,
   container: {
 
     display: 'flex',
-    backgroundColor: '#fff',
+    backgroundColor: 'g',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    marginTop: 70,
     width: '100%',
-    height: 'auto',
+    height: '100%',
+    color: '#fff ',
+
+
   },
+  section_filter: {
+
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    backgroundColor: '#126e51',
+    padding: 0,
+    height: 60,
+
+  },
+  loading: {
+    display: 'flex',
+    marginTop: 160,
+
+    marginBottom: 'auto',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+
+  },
+  loading_img: {
+    width: 200,
+    height: 200,
+  },
+  filter: {
+    marginRight: 10,
+    marginLeft: 10,
+    height: 70,
+
+  },
+  calendar_item: {
+    height: 60,
+    backgroundColor: '#126e51',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+    textAlign: 'center',
+    width: '100%',
+    flexDirection: 'row',
+    borderColor: '#3f8872',
+    borderBottomColor: '#3f8872',
+    borderTopColor: '#3f8872',
+    borderLeftColor: '#3f8872',
+    borderRightColor: '#3f8872',
+
+
+  },
+  calendar_button: {
+
+    width: '10%',
+
+
+  },
+  picker: {
+    width: "90%",
+    height: 10,
+    color: '#FFF',
+    backgroundColor: '#126e51',
+    justifyContent: 'center',
+    borderRadius: 4,
+    borderBottomColor: 'transparent',
+    borderTopColor: 'transparent',
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    display: 'flex',
+    paddingLeft: '3%',
+    textAlign: 'center',
+    alignItems: 'center',
+  },
+  piker_item: {
+    width: '0',
+
+    backgroundColor: '#126e51',
+    color: '#FFF',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    fontSize: 20,
+    paddingLeft: 'auto',
+    marginLeft: 'auto',
+    margin: 4,
+
+  },
+
+
+
   game_main: {
     display: 'flex',
     width: '100%',
+    color: '#fff',
+    marginTop: 0,
+    borderTopColor: '#ffdf1b',
+    borderTopWidth: 2,
+
+  },
+
+  games: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    marginTop: 10,
   },
   game_info: {
-    width: '90%',
-    height: 'auto',
-    
-  },
-  game_section: {
-    flex: 1,
-    marginLeft: 10,
-    marginRight: 10,
-    padding: 10,
-    width: 'auto',
-    height: 'auto',
-    backgroundColor: 'blue',
     display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    width: '100%',
+    height: 70,
+    backgroundColor: '#585858',
+    padding: 10,
+    paddingTop: 15
 
+  },
+  game_info_text: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginRight: 90,
+    textAlign: 'end',
 
+  },
+  game_country: {
+  },
+  game_league: {
+
+  },
+  country_flag: {
+    width: 50,
+    height: 40,
+    backgroundColor: 'blue',
+    marginRight: 25,
+    marginLeft: 5,
+
+  },
+  game_section: {
+    padding: 2,
+
+    width: '100%',
+    height: 100,
+    backgroundColor: '#3f3d3d',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderBottomColor: '#126e51',
+    borderBottomWidth: 3,
 
   },
   game_date: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: 5,
+    marginTop: 10,
+
 
   },
   game_time: {
     display: 'flex',
-    alignItems: 'flex-start',
     justifyContent: 'center',
-    marginRight: 20,
-    width:'100%',
-  },
-  game_macth: {
+    alignItems: 'center',
+    marginLeft: 5,
+    marginRight: 5,
+    width: '20%',
 
+  },
+  game_time_text: {
+    color: '#fff',
+    fontSize: 15,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  game_team: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '62%',
+    height: 'auto',
+    paddingTop: 15,
+    paddingLeft: 15,
+    paddingBottom: 15,
+    color: '#fff',
+    marginLeft: 5,
+    justifyContent: 'center',
+    borderLeftColor: '#eeeeee17',
+    borderLeftWidth: 1,
+    borderRightColor: '#eeeeee17',
+    borderRightWidth: 1,
+
+  },
+  score: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: 'auto',
+    marginBottom: 'auto',
+    marginLeft: 5,
+    marginRight: 5,
+    width: '10%',
+    padding: 5,
+  },
+  game_match: {
+    display: 'flex',
+    flexDirection: 'row',
   },
   team: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'center',
+    marginTop: 4,
+    marginBottom: 3,
+
+  },
+  text_score: {
+    color: '#fff',
+    fontSize: 20,
+    marginBottom: 3,
+    marginTop: 3,
   },
   team_name: {
-    margin: 5,
-    fontSize: 25,
+    textAlign: 'center',
+    fontSize: 15,
+    color: '#fff',
+    marginLeft: 0,
+    display: 'flex',
+    position: 'relative',
+    marginTop: 'auto',
+    paddingBottom: 3,
   },
 
   team_brand: {
     display: 'flex',
-    marginLeft: 20,
-    width: 50,
-    height: 50,
-    backgroundColor: "#fff",
+    marginLeft: 3,
+    marginRight: 15,
+    width: 30,
+    height: 30,
     position: 'relative',
-    float: 'rigth ',
     margin: 2,
+    backgroundColor: "blue",
 
 
+
+  },
+  team_brand_img: {
+    width: 23,
+    height: 23,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    margin: 'auto',
   },
   game_icons: {
     alignSelf: 'center',
-    padding: 10,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    width: '80%',
-
+    marginRight: 10,
   },
   tournament: {
     display: 'flex',
-    marginLeft: 20,
-    width: 50,
-    height: 50,
-    backgroundColor: "#fff",
+    marginLeft: 3,
+    width: 30,
+    height: 30,
+    backgroundColor: "blue",
     position: 'relative',
-    float: 'rigth '
+    float: 'right '
 
   },
   country: {
     display: 'flex',
-    marginLeft: 20,
-    width: 50,
-    height: 50,
-    backgroundColor: "#fff",
-    float: 'rigth '
+    marginLeft: 3,
+    width: 30,
+    height: 30,
+    backgroundColor: "blue",
+    float: 'right '
   }
-});
+})
